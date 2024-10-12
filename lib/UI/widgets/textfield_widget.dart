@@ -7,6 +7,11 @@ class Textfieldwidget extends StatelessWidget {
   final TextEditingController controller;
   final bool? secureText;
   final TextInputType? keyboardtype;
+  final BorderRadius? Borderradias;
+  final Widget? label;
+  final int? maxlength;
+  final int? maxline;
+
   const Textfieldwidget({
     super.key,
     required this.fillColor,
@@ -14,6 +19,9 @@ class Textfieldwidget extends StatelessWidget {
     this.secureText,
     required this.hintText,
     this.keyboardtype,
+    this.Borderradias,
+    this.label,
+    this.maxlength, this.maxline,
   });
 
   @override
@@ -22,21 +30,24 @@ class Textfieldwidget extends StatelessWidget {
       controller: controller,
       obscureText: secureText ?? false,
       decoration: InputDecoration(
+        label: label ?? null,
         fillColor: fillColor,
         filled: true,
         hintText: hintText,
         hintStyle: GoogleFonts.poppins(fontSize: 18),
         contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(70),
+          borderRadius: Borderradias ?? BorderRadius.circular(70),
           borderSide: BorderSide.none,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(70),
+          borderRadius: Borderradias ?? BorderRadius.circular(70),
           borderSide: BorderSide.none,
         ),
       ),
       keyboardType: keyboardtype ?? TextInputType.name,
+      maxLength: maxlength,
+      maxLines: maxline??1,
     );
   }
 }

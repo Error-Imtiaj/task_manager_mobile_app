@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
+import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
 
-import '../widgets/textfield_widget.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -42,7 +42,7 @@ class _SignupScreenState extends State<SignupScreen> {
           style: Theme.of(context)
               .textTheme
               .titleLarge
-              ?.copyWith(color: Colors.white),
+              ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: ColorsUtils.primaryColor,
       ),

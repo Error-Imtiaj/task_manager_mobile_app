@@ -26,14 +26,17 @@ class TmAppbar extends StatelessWidget implements PreferredSizeWidget {
               // NAME
               Text(
                 "Mohammad Imtiaj",
+                maxLines: 1,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: ColorsUtils.backGroundColor),
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                      color: ColorsUtils.backGroundColor,
+                    ),
               ),
 
               // EMAIL
               Text("asharmd2222@gmail.com",
+                  maxLines: 1,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontSize: 14, color: ColorsUtils.backGroundColor)),
             ],

@@ -138,11 +138,11 @@ class _LoginScreenState extends State<LoginScreen> {
           right: 0,
         ),
         Circlewidget(
+          bottom: 0,
           child: SvgPicture.asset(
             Assetpath.bookSvg,
             width: 80,
           ),
-          bottom: 0,
         ),
         Positioned(
           bottom: 0,

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_mobile_app/UI/screens/add_new_task_screen.dart';
+import 'package:task_manager_mobile_app/UI/screens/cancelled_task_screens.dart';
+import 'package:task_manager_mobile_app/UI/screens/completed_task_screens.dart';
+import 'package:task_manager_mobile_app/UI/screens/new_task_screens.dart';
+import 'package:task_manager_mobile_app/UI/screens/progress_task_screens.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 import 'package:task_manager_mobile_app/UI/widgets/navigation_distanations.dart';
 import 'package:task_manager_mobile_app/UI/widgets/tm_Appbar.dart';
@@ -12,10 +17,17 @@ class NavigationScreen extends StatefulWidget {
 
 class _NavigationScreenState extends State<NavigationScreen> {
   int _selectedIndex = 0;
+  final List<Widget> _screens = [
+    const NewTaskScreens(),
+    const CompletedTaskScreens(),
+    const CancelledTaskScreens(),
+    const ProgressTaskScreens(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TmAppbar(),
+      appBar: const TmAppbar(),
+      body: _screens[_selectedIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (value) {
@@ -44,7 +56,22 @@ class _NavigationScreenState extends State<NavigationScreen> {
           ),
         ],
       ),
+      // ADD TASK BUTTON 
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: ColorsUtils.primaryColor,
+        onPressed: () {
+          _navigateToAddNewTaskScreen();
+        },
+        child: Icon(
+          Icons.add,
+          color: ColorsUtils.backGroundColor,
+        ),
+      ),
     );
   }
-}
 
+  void _navigateToAddNewTaskScreen() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => AddNewTaskScreen()));
+  }
+}
