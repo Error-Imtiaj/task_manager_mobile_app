@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:task_manager_mobile_app/UI/screens/navigation_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/reset_pass_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/signup_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/assetPath.dart';
@@ -48,7 +49,9 @@ class _LoginScreenState extends State<LoginScreen> {
             // button
             Custombutton(
               ButtonName: "Sign In",
-              ontap: () {},
+              ontap: () {
+                _navigateToDashboard();
+              },
             ),
             const SizedBox(
               height: 10,
@@ -168,5 +171,13 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return SignupScreen();
     }));
+  }
+
+  void _navigateToDashboard() {
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => const NavigationScreen()),
+        (value) {
+      return false;
+    });
   }
 }

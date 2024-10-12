@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:task_manager_mobile_app/UI/utils/assetPath.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
-import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class PinScreens extends StatefulWidget {

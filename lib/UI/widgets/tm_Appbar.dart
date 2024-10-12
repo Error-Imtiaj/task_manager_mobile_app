@@ -1,0 +1,68 @@
+import 'package:flutter/material.dart';
+import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
+import 'package:task_manager_mobile_app/UI/utils/colors.dart';
+
+class TmAppbar extends StatelessWidget implements PreferredSizeWidget {
+  const TmAppbar({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: ColorsUtils.primaryColor,
+      title: Row(
+        children: [
+          const CircleAvatar(
+            radius: 25,
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // NAME
+              Text(
+                "Mohammad Imtiaj",
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: ColorsUtils.backGroundColor),
+              ),
+
+              // EMAIL
+              Text("asharmd2222@gmail.com",
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontSize: 14, color: ColorsUtils.backGroundColor)),
+            ],
+          ))
+        ],
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: IconButton(
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  (predicate) => false);
+            },
+            icon: Icon(
+              Icons.logout_outlined,
+              size: 34,
+              color: ColorsUtils.backGroundColor,
+            ),
+          ),
+        )
+      ],
+      toolbarHeight: 100,
+    );
+  }
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(100);
+}
