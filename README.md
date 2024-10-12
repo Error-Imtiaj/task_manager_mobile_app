@@ -1,16 +1,31 @@
 # task_manager_mobile_app
 
-A new Flutter project.
-
+> A Flutter project only for Android and IOS.
+---
+## Installation
+First, you need to clone the repository to your local machine. Open your terminal or command prompt and run the following command:
+```bash
+git clone https://github.com/Error-Imtiaj/task_manager_mobile_app.git
+```
 ## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+You might need to run `flutter pub get ` in your project terminal in order to run and build the project.
+```
+flutter pub get
+```
+If you want to run the project by Terminal. You have to open the project folder in your VS Code or any IDE you use the open terminal and run the following command
+```
+flutter run
+```
+# Screens
+### Onboarding Screen
+![Login-screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/Onboarding.png)
+### Login Screen
+![Login-screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/Sign-in.png)
+### Register Screem
+![Register-Screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/sign-up.png)
+### Dashboard Screen
+![Dashboard-Screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/dashboard.png)
+### Pin Verify Screen
+![Pin-Verify-Screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/pin-verify.png)
+### Reset password Screen
+![Reset-Pass-Screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/Reset-pass.png)
