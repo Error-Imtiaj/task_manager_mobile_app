@@ -18,19 +18,12 @@ flutter run
 ```
 # Screens
 <p align="center">
-  <img src="https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/Onboarding.png" alt="Image 1" width="300"/>
-  <img src="https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/Sign-in.png" alt="Image 2" width="300"/>
+
+  <img src="https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/Onboarding.png" alt="Onboarding Screen" width="300"/>
+  <img src="https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/Sign-in.png" alt="Login Screen" width="300"/>
+  <img src="https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/sign-up.png" alt="Register Screem" width="300"/>
+  <img src="https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/dashboard.png" alt="Dashboard Screen" width="300"/>
+  <img src="https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/pin-verify.png" alt="Pin Verify Screen" width="300"/>
+  <img src="https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/Reset-pass.png" alt="Reset password Screen" width="300"/>
 </p>
 
-### Onboarding Screen
-![Login-screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/Onboarding.png)
-### Login Screen
-![Login-screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/Sign-in.png)
-### Register Screem
-![Register-Screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/sign-up.png)
-### Dashboard Screen
-![Dashboard-Screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/dashboard.png)
-### Pin Verify Screen
-![Pin-Verify-Screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/pin-verify.png)
-### Reset password Screen
-![Reset-Pass-Screen](https://github.com/Error-Imtiaj/Images/blob/main/Todo%20Manager%20Mobile%20app/Reset-pass.png)
