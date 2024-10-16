@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:task_manager_mobile_app/UI/screens/set_password_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/assetPath.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
@@ -69,8 +72,10 @@ class _PinScreensState extends State<PinScreens> {
               // BUTTON
               Custombutton(
                 ButtonName: "Verify",
-                // TODO VERIFY 
-                ontap: () {},
+                // TODO VERIFY
+                ontap: () {
+                  _navigateToSetPass();
+                },
               ),
               const SizedBox(
                 height: 20,
@@ -80,6 +85,11 @@ class _PinScreensState extends State<PinScreens> {
         ),
       ),
     );
+  }
+
+  void _navigateToSetPass() {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> const SetPasswordScreen()
+    ));
   }
 
   Widget _verifyPin() {
