@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:task_manager_mobile_app/UI/utils/colors.dart';
+
 import 'package:task_manager_mobile_app/UI/widgets/card_widget.dart';
 import 'package:task_manager_mobile_app/UI/widgets/taskTile_Widget.dart';
 
@@ -15,15 +14,23 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          children: [
-            // CARD DETAILS
-            _heroSection(),
-            // TASK ITEMS
-            Expanded(
-                child: ListView.separated(
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          // CARD DETAILS
+          Container(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: _heroSection(),
+            ),
+            color: Colors.white,
+          ),
+
+          // TASK ITEMS
+          Expanded(
+              child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: ListView.separated(
               itemCount: 15,
               itemBuilder: (context, index) {
                 return TasktileWidget(
@@ -38,9 +45,9 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
                   height: 8,
                 );
               },
-            ))
-          ],
-        ),
+            ),
+          ))
+        ],
       ),
     );
   }
