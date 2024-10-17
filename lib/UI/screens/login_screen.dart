@@ -19,15 +19,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController EmailController = TextEditingController();
   final TextEditingController PassController = TextEditingController();
 
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     EmailController.dispose();
     PassController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,7 +51,9 @@ class _LoginScreenState extends State<LoginScreen> {
             Custombutton(
               ButtonName: "Sign In",
               ontap: () {
-                _navigateToDashboard();
+                if (_formKey.currentState!.validate()) {
+                  _navigateToDashboard();
+                }
               },
             ),
             const SizedBox(
@@ -93,27 +96,30 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _loginForm() {
     return Form(
+        key: _formKey,
         child: Column(
-      children: [
-        // Email Text Field
-        Textfieldwidget(
-          fillColor: ColorsUtils.fieldPrimaryColor,
-          controller: EmailController,
-          hintText: "Email",
-        ),
-        const SizedBox(
-          height: 10,
-        ),
+          children: [
+            // Email Text Field
+            Textfieldwidget(
+              fillColor: ColorsUtils.fieldPrimaryColor,
+              controller: EmailController,
+              hintText: "Email",
+              validatorFunction: (p0) => _nameValidator(p0),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
 
-        // password Text Field
-        Textfieldwidget(
-          fillColor: ColorsUtils.fieldPrimaryColor,
-          controller: PassController,
-          hintText: "Password",
-          secureText: true,
-        ),
-      ],
-    ));
+            // password Text Field
+            Textfieldwidget(
+              fillColor: ColorsUtils.fieldPrimaryColor,
+              controller: PassController,
+              hintText: "Password",
+              secureText: true,
+              validatorFunction: (p0) => _validator(p0),
+            ),
+          ],
+        ));
   }
 
   Widget _welcomeBack() {
@@ -179,5 +185,25 @@ class _LoginScreenState extends State<LoginScreen> {
         (value) {
       return false;
     });
+  }
+
+  _nameValidator(String? value) {
+    if (value!.isEmpty) {
+      return 'Field must not be empty';
+    } else {
+      return null;
+    }
+  }
+
+  _validator(
+    String? value,
+  ) {
+    if (value!.isEmpty) {
+      return 'Field must not be empty';
+    } else if (value.length <= 8) {
+      return 'Input must be more than 8 character';
+    } else {
+      return null;
+    }
   }
 }

@@ -11,6 +11,7 @@ class Textfieldwidget extends StatelessWidget {
   final Widget? label;
   final int? maxlength;
   final int? maxline;
+  final String? Function(String?) validatorFunction;
 
   const Textfieldwidget({
     super.key,
@@ -21,7 +22,9 @@ class Textfieldwidget extends StatelessWidget {
     this.keyboardtype,
     this.Borderradias,
     this.label,
-    this.maxlength, this.maxline,
+    this.maxlength,
+    this.maxline,
+    required this.validatorFunction,
   });
 
   @override
@@ -47,7 +50,9 @@ class Textfieldwidget extends StatelessWidget {
       ),
       keyboardType: keyboardtype ?? TextInputType.name,
       maxLength: maxlength,
-      maxLines: maxline??1,
+      maxLines: maxline ?? 1,
+      validator: validatorFunction,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 }

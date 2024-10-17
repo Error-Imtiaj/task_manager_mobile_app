@@ -6,7 +6,6 @@ import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
 
-
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -70,7 +69,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
 
                 // BUTTON
-                Custombutton(ButtonName: "Sign Up"),
+                Custombutton(
+                  ButtonName: "Sign Up",
+                  ontap: () {
+                    if (_formKey.currentState!.validate()) {
+                      _navigateToSignInPage();
+                    }
+                  },
+                ),
                 const SizedBox(
                   height: 30,
                 ),
@@ -111,6 +117,7 @@ class _SignupScreenState extends State<SignupScreen> {
               fillColor: ColorsUtils.fieldPrimaryColor,
               controller: EmailController,
               hintText: "Email",
+              validatorFunction: (p0) => _nameValidator(p0),
             ),
             const SizedBox(
               height: 10,
@@ -120,6 +127,7 @@ class _SignupScreenState extends State<SignupScreen> {
               fillColor: ColorsUtils.fieldPrimaryColor,
               controller: FnameController,
               hintText: "First Name",
+              validatorFunction: (p0) => _nameValidator(p0),
             ),
             const SizedBox(
               height: 10,
@@ -130,6 +138,7 @@ class _SignupScreenState extends State<SignupScreen> {
               fillColor: ColorsUtils.fieldPrimaryColor,
               controller: LnameController,
               hintText: "Last Name",
+              validatorFunction: (p0) => _nameValidator(p0),
             ),
             const SizedBox(
               height: 10,
@@ -141,6 +150,7 @@ class _SignupScreenState extends State<SignupScreen> {
               controller: NumberController,
               hintText: "Number",
               keyboardtype: TextInputType.number,
+              validatorFunction: (p0) => _nameValidator(p0),
             ),
             const SizedBox(
               height: 10,
@@ -152,6 +162,7 @@ class _SignupScreenState extends State<SignupScreen> {
               controller: PassController,
               hintText: "Password",
               secureText: true,
+              validatorFunction: (p0) => _validator(p0),
             ),
           ],
         ));
@@ -161,5 +172,25 @@ class _SignupScreenState extends State<SignupScreen> {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return LoginScreen();
     }));
+  }
+
+  _validator(
+    String? value,
+  ) {
+    if (value!.isEmpty) {
+      return 'Field must not be empty';
+    } else if (value.length <= 8) {
+      return 'Input must be more than 8 character';
+    } else {
+      return null;
+    }
+  }
+
+  _nameValidator(String? value) {
+    if (value!.isEmpty) {
+      return 'Field must not be empty';
+    } else {
+      return null;
+    }
   }
 }

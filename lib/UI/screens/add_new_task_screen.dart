@@ -11,14 +11,15 @@ class AddNewTaskScreen extends StatefulWidget {
 }
 
 class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
+  final _formkey = GlobalKey<FormState>();
   final TextEditingController _scontroller = TextEditingController();
   final TextEditingController _dcontroller = TextEditingController();
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _scontroller.dispose();
     _dcontroller.dispose();
+    super.dispose();
   }
 
   @override
@@ -39,59 +40,74 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 30,
-              ),
-              // ADD NEW TASK TITLE
-              Text(
-                "Add New Task",
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: ColorsUtils.primaryColor),
-              ),
+          child: Form(
+            key: _formkey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 30,
+                ),
+                // ADD NEW TASK TITLE
+                Text(
+                  "Add New Task",
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: ColorsUtils.primaryColor),
+                ),
 
-              // SUBJECT TEXT FIELD
-              const SizedBox(
-                height: 30,
-              ),
-              Textfieldwidget(
-                fillColor: ColorsUtils.fieldPrimaryColor,
-                controller: _scontroller,
-                hintText: "Subject",
-                Borderradias: BorderRadius.circular(10),
-              ),
+                // SUBJECT TEXT FIELD
+                const SizedBox(
+                  height: 30,
+                ),
+                Textfieldwidget(
+                  fillColor: ColorsUtils.fieldPrimaryColor,
+                  controller: _scontroller,
+                  hintText: "Subject",
+                  Borderradias: BorderRadius.circular(10),
+                  validatorFunction: (p0) => _nameValidator(p0),
+                ),
 
-              // DESCRIPTION TEXT FIELD
-              const SizedBox(
-                height: 20,
-              ),
-              Textfieldwidget(
-                fillColor: ColorsUtils.fieldPrimaryColor,
-                controller: _dcontroller,
-                hintText: "Description",
-                Borderradias: BorderRadius.circular(10),
-                maxlength: 1000,
-                maxline: 7,
-              ),
+                // DESCRIPTION TEXT FIELD
+                const SizedBox(
+                  height: 20,
+                ),
+                Textfieldwidget(
+                  fillColor: ColorsUtils.fieldPrimaryColor,
+                  controller: _dcontroller,
+                  hintText: "Description",
+                  Borderradias: BorderRadius.circular(10),
+                  maxlength: 1000,
+                  maxline: 7,
+                  validatorFunction: (p0) => _nameValidator(p0),
+                ),
 
-              // BUTTON
-              const SizedBox(
-                height: 20,
-              ),
-              Custombutton(
-                ButtonName: "Add Task",
-                ontap: () {
-                  _addtask();
-                },
-              )
-            ],
+                // BUTTON
+                const SizedBox(
+                  height: 20,
+                ),
+                Custombutton(
+                  ButtonName: "Add Task",
+                  ontap: () {
+                    if (_formkey.currentState!.validate()) {
+                      _addtask();
+                    }
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  _nameValidator(String? value) {
+    if (value!.isEmpty) {
+      return 'Field must not be empty';
+    } else {
+      return null;
+    }
   }
 
   //TODO ONTAP ADD TASK

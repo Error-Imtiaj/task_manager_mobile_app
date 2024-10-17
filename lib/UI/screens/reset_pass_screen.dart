@@ -25,6 +25,7 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _fromkey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -39,72 +40,77 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 80,
-              ),
-              // TITLE
-              Text(
-                "Your email address",
-                style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    color: ColorsUtils.primaryColor,
-                    fontSize: 34),
-              ),
-              // SENT MEAASGE
+          child: Form(
+            key: _fromkey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 80,
+                ),
+                // TITLE
+                Text(
+                  "Your email address",
+                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      color: ColorsUtils.primaryColor,
+                      fontSize: 34),
+                ),
+                // SENT MEAASGE
 
-              Text(
-                "A 6 digit verification OTP will be sent to your email",
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    color: Colors.grey,
-                    fontSize: 14),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
+                Text(
+                  "A 6 digit verification OTP will be sent to your email",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      color: Colors.grey,
+                      fontSize: 14),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
 
-              // EMAIL FIELD
-              Textfieldwidget(
+                // EMAIL FIELD
+                Textfieldwidget(
                   fillColor: ColorsUtils.fieldPrimaryColor,
                   controller: emailController,
-                  hintText: "Email"),
-              const SizedBox(
-                height: 20,
-              ),
+                  hintText: "Email",
+                  validatorFunction: (p0) => _nameValidator(p0),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
 
-              // BUTTON
-              Custombutton(
-                ButtonName: "Send verification Code",
-                ontap: () => _navigateToPinVerifyPage(),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+                // BUTTON
+                Custombutton(
+                  ButtonName: "Send verification Code",
+                  ontap: () => _navigateToPinVerifyPage(),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
 
-              // SIGN IN
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                          text: "Have Account?",
-                          style: GoogleFonts.poppins(
-                              color: ColorsUtils.primaryColor)),
-                      TextSpan(
-                          text: " Log in",
-                          style: GoogleFonts.poppins(
-                              color: ColorsUtils.primaryColor,
-                              fontWeight: FontWeight.bold),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = _navigateToSignInPage),
-                    ],
+                // SIGN IN
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "Have Account?",
+                            style: GoogleFonts.poppins(
+                                color: ColorsUtils.primaryColor)),
+                        TextSpan(
+                            text: " Log in",
+                            style: GoogleFonts.poppins(
+                                color: ColorsUtils.primaryColor,
+                                fontWeight: FontWeight.bold),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = _navigateToSignInPage),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -121,5 +127,13 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return PinScreens();
     }));
+  }
+
+  _nameValidator(String? value) {
+    if (value!.isEmpty) {
+      return 'Field must not be empty';
+    } else {
+      return null;
+    }
   }
 }

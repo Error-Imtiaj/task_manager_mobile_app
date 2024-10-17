@@ -70,6 +70,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
               fillColor: ColorsUtils.fieldPrimaryColor,
               controller: _passController,
               hintText: "Password",
+              validatorFunction: (p0) => _validator(p0),
             ),
             const SizedBox(
               height: 10,
@@ -80,6 +81,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
               fillColor: ColorsUtils.fieldPrimaryColor,
               controller: _confirmPassController,
               hintText: "Confirm Password",
+              validatorFunction: (p0) => _validator(p0),
             ),
             const SizedBox(
               height: 10,
@@ -124,5 +126,17 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return LoginScreen();
     }));
+  }
+
+  _validator(
+    String? value,
+  ) {
+    if (value!.isEmpty) {
+      return 'Field must not be empty';
+    } else if (value.length <= 8) {
+      return 'Input must be more than 8 character';
+    } else {
+      return null;
+    }
   }
 }
