@@ -24,7 +24,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Assetpath.onBoardingSvg,
               width: 300,
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Text(
@@ -43,9 +43,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         onPressed: () {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => LoginScreen()));
+              context, MaterialPageRoute(builder: (context) => const LoginScreen()));
         },
-        child: Icon(
+        child: const Icon(
           Icons.arrow_forward,
           color: Colors.white,
           size: 35,

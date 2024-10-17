@@ -50,10 +50,10 @@ class TmAppbar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: () {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                   (predicate) => false);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.logout_outlined,
               size: 34,
               color: ColorsUtils.backGroundColor,
@@ -67,5 +67,5 @@ class TmAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(100);
+  Size get preferredSize => const Size.fromHeight(100);
 }

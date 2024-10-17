@@ -124,7 +124,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
 
   void _navigateToSignInPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return LoginScreen();
+      return const LoginScreen();
     }));
   }
 

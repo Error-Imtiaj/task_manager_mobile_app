@@ -15,21 +15,21 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController EmailController = TextEditingController();
-  final TextEditingController FnameController = TextEditingController();
-  final TextEditingController LnameController = TextEditingController();
-  final TextEditingController NumberController = TextEditingController();
-  final TextEditingController PassController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController fnameController = TextEditingController();
+  final TextEditingController lnameController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    EmailController.dispose();
-    FnameController.dispose();
-    LnameController.dispose();
-    NumberController.dispose();
-    PassController.dispose();
+    emailController.dispose();
+    fnameController.dispose();
+    lnameController.dispose();
+    numberController.dispose();
+    passController.dispose();
   }
 
   @override
@@ -115,7 +115,7 @@ class _SignupScreenState extends State<SignupScreen> {
             // EMAIL
             Textfieldwidget(
               fillColor: ColorsUtils.fieldPrimaryColor,
-              controller: EmailController,
+              controller: emailController,
               hintText: "Email",
               validatorFunction: (p0) => _nameValidator(p0),
             ),
@@ -125,7 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
             // FIRST NAME
             Textfieldwidget(
               fillColor: ColorsUtils.fieldPrimaryColor,
-              controller: FnameController,
+              controller: fnameController,
               hintText: "First Name",
               validatorFunction: (p0) => _nameValidator(p0),
             ),
@@ -136,7 +136,7 @@ class _SignupScreenState extends State<SignupScreen> {
             // LAST NAME
             Textfieldwidget(
               fillColor: ColorsUtils.fieldPrimaryColor,
-              controller: LnameController,
+              controller: lnameController,
               hintText: "Last Name",
               validatorFunction: (p0) => _nameValidator(p0),
             ),
@@ -147,7 +147,7 @@ class _SignupScreenState extends State<SignupScreen> {
             // NUMBER
             Textfieldwidget(
               fillColor: ColorsUtils.fieldPrimaryColor,
-              controller: NumberController,
+              controller: numberController,
               hintText: "Number",
               keyboardtype: TextInputType.number,
               validatorFunction: (p0) => _nameValidator(p0),
@@ -159,7 +159,7 @@ class _SignupScreenState extends State<SignupScreen> {
             // PASSWORD
             Textfieldwidget(
               fillColor: ColorsUtils.fieldPrimaryColor,
-              controller: PassController,
+              controller: passController,
               hintText: "Password",
               secureText: true,
               validatorFunction: (p0) => _validator(p0),
@@ -170,7 +170,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void _navigateToSignInPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return LoginScreen();
+      return const LoginScreen();
     }));
   }
 

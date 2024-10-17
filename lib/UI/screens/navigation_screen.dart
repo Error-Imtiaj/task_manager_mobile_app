@@ -62,7 +62,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         onPressed: () {
           _navigateToAddNewTaskScreen();
         },
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: ColorsUtils.backGroundColor,
         ),
@@ -72,6 +72,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   void _navigateToAddNewTaskScreen() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddNewTaskScreen()));
+        context, MaterialPageRoute(builder: (context) => const AddNewTaskScreen()));
   }
 }

@@ -108,7 +108,7 @@ class _PinScreensState extends State<PinScreens> {
           inactiveColor: ColorsUtils.primaryColor,
           selectedFillColor: Colors.transparent,
           selectedColor: ColorsUtils.primaryColor),
-      animationDuration: Duration(milliseconds: 300),
+      animationDuration: const Duration(milliseconds: 300),
       enableActiveFill: true,
       appContext: context,
       keyboardType: TextInputType.number,

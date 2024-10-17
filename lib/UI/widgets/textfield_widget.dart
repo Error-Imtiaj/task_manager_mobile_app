@@ -33,12 +33,12 @@ class Textfieldwidget extends StatelessWidget {
       controller: controller,
       obscureText: secureText ?? false,
       decoration: InputDecoration(
-        label: label ?? null,
+        label: label ,
         fillColor: fillColor,
         filled: true,
         hintText: hintText,
         hintStyle: GoogleFonts.poppins(fontSize: 18),
-        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
         enabledBorder: OutlineInputBorder(
           borderRadius: Borderradias ?? BorderRadius.circular(70),
           borderSide: BorderSide.none,

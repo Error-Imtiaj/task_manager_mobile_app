@@ -14,9 +14,9 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Future<void> _moveToNextScreen() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => OnboardingScreen()));
+        context, MaterialPageRoute(builder: (context) => const OnboardingScreen()));
   }
 
   @override

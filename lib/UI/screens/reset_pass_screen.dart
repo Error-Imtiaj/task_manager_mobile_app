@@ -25,7 +25,7 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _fromkey = GlobalKey<FormState>();
+    final fromkey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -41,7 +41,7 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Form(
-            key: _fromkey,
+            key: fromkey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -119,13 +119,13 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
 
   void _navigateToSignInPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return LoginScreen();
+      return const LoginScreen();
     }));
   }
 
   void _navigateToPinVerifyPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return PinScreens();
+      return const PinScreens();
     }));
   }
 

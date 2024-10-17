@@ -5,8 +5,8 @@ import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 class TasktileWidget extends StatefulWidget {
   final String? title;
   final String? description;
-  final String? Date;
-  const TasktileWidget({super.key, this.title, this.description, this.Date});
+  final String? date;
+  const TasktileWidget({super.key, this.title, this.description, this.date});
 
   @override
   State<TasktileWidget> createState() => _TasktileWidgetState();
@@ -33,12 +33,12 @@ class _TasktileWidgetState extends State<TasktileWidget> {
             style: Theme.of(context).textTheme.bodySmall,
             maxLines: 2,
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
-          // Date
+          // date
           Text(
-            "Date: ${widget.Date}",
+            "date: ${widget.date}",
             style: Theme.of(context)
                 .textTheme
                 .bodySmall
@@ -49,16 +49,16 @@ class _TasktileWidgetState extends State<TasktileWidget> {
             children: [
               ElevatedButton(
                 onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    shape: const RoundedRectangleBorder(),
+                    backgroundColor: ColorsUtils.primaryColor),
                 child: Text(
                   "Show More",
                   style: GoogleFonts.poppins(
                       fontSize: 12, color: ColorsUtils.backGroundColor),
                 ),
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(),
-                    backgroundColor: ColorsUtils.primaryColor),
               ),
-              Container(
+              SizedBox(
                 width: 100,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -68,13 +68,13 @@ class _TasktileWidgetState extends State<TasktileWidget> {
                         onPressed: () {
                           _editStatus();
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.edit_document,
                           color: ColorsUtils.primaryColor,
                         )),
                     IconButton(
                         onPressed: () {},
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.delete,
                           color: ColorsUtils.pinkColor,
                         )),
@@ -93,7 +93,7 @@ class _TasktileWidgetState extends State<TasktileWidget> {
         context: (context),
         builder: (context) {
           return AlertDialog(
-            title: Text("Edit status"),
+            title: const Text("Edit status"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: ['New', 'Completed', 'Cancelled', 'Progress'].map((e) {
@@ -107,13 +107,13 @@ class _TasktileWidgetState extends State<TasktileWidget> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("Cancel"),
+                child: const Text("Cancel"),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("Ok"),
+                child: const Text("Ok"),
               ),
             ],
           );

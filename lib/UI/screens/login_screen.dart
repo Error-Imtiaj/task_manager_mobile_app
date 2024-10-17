@@ -20,14 +20,14 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController EmailController = TextEditingController();
-  final TextEditingController PassController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
 
   @override
   void dispose() {
     // TODO: implement dispose
-    EmailController.dispose();
-    PassController.dispose();
+    emailController.dispose();
+    passController.dispose();
     super.dispose();
   }
 
@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
             // Email Text Field
             Textfieldwidget(
               fillColor: ColorsUtils.fieldPrimaryColor,
-              controller: EmailController,
+              controller: emailController,
               hintText: "Email",
               validatorFunction: (p0) => _nameValidator(p0),
             ),
@@ -113,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
             // password Text Field
             Textfieldwidget(
               fillColor: ColorsUtils.fieldPrimaryColor,
-              controller: PassController,
+              controller: passController,
               hintText: "Password",
               secureText: true,
               validatorFunction: (p0) => _validator(p0),
@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Stack(
       children: [
         Container(
-          decoration: BoxDecoration(),
+          decoration: const BoxDecoration(),
           width: 300,
           height: 100,
         ),
@@ -169,13 +169,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _navigateToForgotPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return ResetPassScreen();
+      return const ResetPassScreen();
     }));
   }
 
   void _navigateToSignUpPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return SignupScreen();
+      return const SignupScreen();
     }));
   }
 
