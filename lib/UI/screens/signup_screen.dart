@@ -1,10 +1,17 @@
+import 'dart:ffi';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
+import 'package:task_manager_mobile_app/UI/utils/urls.dart';
+import 'package:task_manager_mobile_app/UI/widgets/center_progress_indicate.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
+import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
+import 'package:task_manager_mobile_app/data/model/network_response.dart';
+import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -20,6 +27,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController lnameController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
   final TextEditingController passController = TextEditingController();
+  bool _inProgress = false;
 
   @override
   void dispose() {
@@ -69,13 +77,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
 
                 // BUTTON
-                Custombutton(
-                  ButtonName: "Sign Up",
-                  ontap: () {
-                    if (_formKey.currentState!.validate()) {
-                      _navigateToSignInPage();
-                    }
-                  },
+                Visibility(
+                  visible: !_inProgress,
+                  replacement: const CenterProgressIndicate(),
+                  child: Custombutton(
+                    ButtonName: "Sign Up",
+                    ontap: () {
+                      _next();
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 30,
@@ -166,6 +176,33 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
           ],
         ));
+  }
+
+  void _next() {
+    if (_formKey.currentState!.validate()) {
+      _signUp();
+    }
+  }
+
+  Future<void> _signUp() async {
+    _inProgress = true;
+    setState(() {});
+    Map<String, dynamic> requestBody = {
+      "email": emailController.text.trim(),
+      "firstName": fnameController.text.trim(),
+      "lastName": lnameController.text.trim(),
+      "mobile": numberController.text.trim(),
+      "password": passController.text.trim()
+    };
+    NetworkModel response = await NetworkCaller.postRequest(
+        url: Urls.registrationUrl, body: requestBody);
+    _inProgress = false;
+    setState(() {});
+    if (response.isSuccess) {
+      showSnackBar(context, "Account has created");
+    } else {
+      showSnackBar(context, response.errorMessage, true);
+    }
   }
 
   void _navigateToSignInPage() {

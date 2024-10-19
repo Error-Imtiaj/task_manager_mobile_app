@@ -11,7 +11,7 @@ class Textfieldwidget extends StatelessWidget {
   final Widget? label;
   final int? maxlength;
   final int? maxline;
-  final String? Function(String?) validatorFunction;
+  final String? Function(String?)?validatorFunction;
 
   const Textfieldwidget({
     super.key,
@@ -24,7 +24,7 @@ class Textfieldwidget extends StatelessWidget {
     this.label,
     this.maxlength,
     this.maxline,
-    required this.validatorFunction,
+     this.validatorFunction,
   });
 
   @override
