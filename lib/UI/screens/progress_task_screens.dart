@@ -19,6 +19,7 @@ class _ProgressTaskScreensState extends State<ProgressTaskScreens> {
           description:
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor e ere grgehg ukhueru ",
           date: "16/11/2003",
+          chipText: "Progress",
         );
       },
       separatorBuilder: (BuildContext context, int index) {

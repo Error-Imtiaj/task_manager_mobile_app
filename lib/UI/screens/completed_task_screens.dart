@@ -19,6 +19,7 @@ class _CompletedTaskScreensState extends State<CompletedTaskScreens> {
           description:
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor e ere grgehg ukhueru ",
           date: "16/11/2003",
+          chipText: "Completed",
         );
       },
       separatorBuilder: (BuildContext context, int index) {

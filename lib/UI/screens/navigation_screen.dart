@@ -26,7 +26,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const TmAppbar(),
+      appBar: const TmAppbar(
+        isprofile: false,
+      ),
       body: _screens[_selectedIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
@@ -56,7 +58,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           ),
         ],
       ),
-      // ADD TASK BUTTON 
+      // ADD TASK BUTTON
       floatingActionButton: FloatingActionButton(
         backgroundColor: ColorsUtils.primaryColor,
         onPressed: () {
@@ -71,7 +73,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   }
 
   void _navigateToAddNewTaskScreen() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const AddNewTaskScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AddNewTaskScreen()));
   }
 }

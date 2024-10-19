@@ -19,6 +19,7 @@ class _CancelledTaskScreensState extends State<CancelledTaskScreens> {
           description:
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor e ere grgehg ukhueru ",
           date: "16/11/2003",
+          chipText: "Cancelled",
         );
       },
       separatorBuilder: (BuildContext context, int index) {

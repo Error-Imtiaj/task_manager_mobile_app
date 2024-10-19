@@ -6,7 +6,13 @@ class TasktileWidget extends StatefulWidget {
   final String? title;
   final String? description;
   final String? date;
-  const TasktileWidget({super.key, this.title, this.description, this.date});
+  final String chipText;
+  const TasktileWidget(
+      {super.key,
+      this.title,
+      this.description,
+      this.date,
+      required this.chipText});
 
   @override
   State<TasktileWidget> createState() => _TasktileWidgetState();
@@ -47,15 +53,13 @@ class _TasktileWidgetState extends State<TasktileWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(),
-                    backgroundColor: ColorsUtils.primaryColor),
-                child: Text(
-                  "Show More",
+              Chip(
+                label: Text(
+                  widget.chipText,
                   style: GoogleFonts.poppins(
-                      fontSize: 12, color: ColorsUtils.backGroundColor),
+                      fontSize: 12,
+                      color: ColorsUtils.primaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(

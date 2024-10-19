@@ -38,6 +38,7 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
                   description:
                       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor e ere grgehg ukhueru ",
                   date: "16/11/2003",
+                  chipText: "New",
                 );
               },
               separatorBuilder: (BuildContext context, int index) {
