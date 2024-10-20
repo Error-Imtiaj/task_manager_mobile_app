@@ -7,9 +7,14 @@ import 'package:task_manager_mobile_app/UI/screens/reset_pass_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/signup_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/assetPath.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
+import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/circle_widget.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
+import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
+import 'package:task_manager_mobile_app/auth/auth.dart';
+import 'package:task_manager_mobile_app/data/model/network_response.dart';
+import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
+  bool _isProgress = false;
 
   @override
   void dispose() {
@@ -48,13 +54,17 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 30,
             ),
             // button
-            Custombutton(
-              ButtonName: "Sign In",
-              ontap: () {
-                if (_formKey.currentState!.validate()) {
-                  _navigateToDashboard();
-                }
-              },
+            Visibility(
+              visible: !_isProgress,
+              replacement: Center(child: CircularProgressIndicator()),
+              child: Custombutton(
+                ButtonName: "Sign In",
+                ontap: () {
+                  if (_formKey.currentState!.validate()) {
+                    signIn();
+                  }
+                },
+              ),
             ),
             const SizedBox(
               height: 10,
@@ -97,6 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _loginForm() {
     return Form(
         key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
             // Email Text Field
@@ -104,6 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
               fillColor: ColorsUtils.fieldPrimaryColor,
               controller: emailController,
               hintText: "Email",
+              keyboardtype: TextInputType.emailAddress,
               validatorFunction: (p0) => _nameValidator(p0),
             ),
             const SizedBox(
@@ -204,6 +216,30 @@ class _LoginScreenState extends State<LoginScreen> {
       return 'Input must be more than 8 character';
     } else {
       return null;
+    }
+  }
+
+  Future<void> signIn() async {
+    _isProgress = true;
+    setState(() {});
+    Map<String, dynamic> body = {
+      "email": emailController.text.trim(),
+      "password": passController.text
+    };
+    final NetworkModel response =
+        await NetworkCaller.postRequest(url: Urls.signInUrl, body: body);
+    _isProgress = false;
+    setState(() {});
+    if (response.isSuccess) {
+      final data = response.message['data'];
+      final myMap = data[0];
+      await Auth.setUserDataCache(myMap['email'], myMap['firstName']);
+      await Auth.getUserDataCache();
+      await Auth.saveToken(response.message['token']);
+      showSnackBar(context, "You have successfully signed in");
+      _navigateToDashboard();
+    } else {
+      showSnackBar(context, response.errorMessage, true);
     }
   }
 }

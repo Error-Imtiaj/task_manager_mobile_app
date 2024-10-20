@@ -39,13 +39,24 @@ class NetworkCaller {
       printDebug(url, response);
       if (response.statusCode == 200) {
         final decodeData = jsonDecode(response.body);
+        if (decodeData['status'] == 'fail') {
+          return NetworkModel(
+            statusCode: response.statusCode,
+            isSuccess: false,
+            errorMessage: decodeData['data'],
+          );
+        }
         return NetworkModel(
           statusCode: response.statusCode,
           isSuccess: true,
           message: decodeData,
         );
       } else {
-        return NetworkModel(statusCode: response.statusCode, isSuccess: false);
+        final decodeData = jsonDecode(response.body);
+        return NetworkModel(
+            statusCode: response.statusCode,
+            isSuccess: false,
+            errorMessage: decodeData['data']);
       }
     } catch (e) {
       return NetworkModel(

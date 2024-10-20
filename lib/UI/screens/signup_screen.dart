@@ -120,6 +120,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget _signupForm() {
     return Form(
         key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
             // EMAIL
@@ -199,14 +200,21 @@ class _SignupScreenState extends State<SignupScreen> {
     _inProgress = false;
     setState(() {});
     if (response.isSuccess) {
-      showSnackBar(context, "Account has created");
+      showSnackBar(context, "Congratulations! Your account has been created");
+      _navigateToSignInPage();
+      showSnackBar(context, "Please Sign in");
+      emailController.clear();
+      fnameController.clear();
+      lnameController.clear();
+      numberController.clear();
+      passController.clear();
     } else {
       showSnackBar(context, response.errorMessage, true);
     }
   }
 
   void _navigateToSignInPage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
       return const LoginScreen();
     }));
   }

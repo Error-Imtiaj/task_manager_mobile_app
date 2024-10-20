@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/profile_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
+import 'package:task_manager_mobile_app/auth/auth.dart';
 
 class TmAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool isprofile;
@@ -12,6 +13,8 @@ class TmAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String? name = Auth.myName;
+    final String? email = Auth.myEmail;
     void navigateToProfile() {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const ProfileScreen()));
@@ -40,7 +43,7 @@ class TmAppbar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 // NAME
                 Text(
-                  "Mohammad Imtiaj",
+                  name ?? 'no name',
                   maxLines: 1,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w900,
@@ -50,7 +53,7 @@ class TmAppbar extends StatelessWidget implements PreferredSizeWidget {
                 ),
 
                 // EMAIL
-                Text("asharmd2222@gmail.com",
+                Text(email ?? 'No email',
                     maxLines: 1,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontSize: 14, color: ColorsUtils.backGroundColor)),
@@ -64,10 +67,7 @@ class TmAppbar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(right: 10),
           child: IconButton(
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (predicate) => false);
+              logout(context);
             },
             icon: const Icon(
               Icons.logout_outlined,
@@ -78,6 +78,15 @@ class TmAppbar extends StatelessWidget implements PreferredSizeWidget {
         )
       ],
       toolbarHeight: 100,
+    );
+  }
+
+  Future<void> logout(BuildContext context) async {
+    await Auth.clearUserData();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+      (predicate) => false,
     );
   }
 
