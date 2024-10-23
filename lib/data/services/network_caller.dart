@@ -46,6 +46,7 @@ class NetworkCaller {
             errorMessage: decodeData['data'],
           );
         }
+        
         return NetworkModel(
           statusCode: response.statusCode,
           isSuccess: true,
