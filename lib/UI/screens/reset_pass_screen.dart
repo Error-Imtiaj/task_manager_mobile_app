@@ -4,8 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/pin_screens.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
+import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
+import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
+import 'package:task_manager_mobile_app/auth/auth.dart';
+import 'package:task_manager_mobile_app/data/model/network_response.dart';
+import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class ResetPassScreen extends StatefulWidget {
   const ResetPassScreen({super.key});
@@ -83,7 +88,11 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                 // BUTTON
                 Custombutton(
                   ButtonName: "Send verification Code",
-                  ontap: () => _navigateToPinVerifyPage(),
+                  ontap: () {
+                    if (fromkey.currentState!.validate()) {
+                      _sendVerificationMail();
+                    }
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -125,13 +134,35 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
 
   void _navigateToPinVerifyPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const PinScreens();
+      return  PinScreens(email: emailController.text.trim(),);
     }));
+  }
+
+  Future _sendVerificationMail() async {
+    try {
+      NetworkModel sendMailResponse = await NetworkCaller.getRequest(
+        url: '${Urls.sendOtpToEmailUrl}/${emailController.text.trim()}',
+      );
+      if (sendMailResponse.statusCode == 200) {
+        showSnackBar(
+          context,
+          sendMailResponse.message,
+          false,
+        );
+        _navigateToPinVerifyPage();
+      } else {
+        showSnackBar(context, sendMailResponse.errorMessage, true);
+      }
+    } catch (e) {
+      showSnackBar(context, e.toString(), true);
+    }
   }
 
   _nameValidator(String? value) {
     if (value!.isEmpty) {
       return 'Field must not be empty';
+    } else if (value!.contains('@') == false || value!.contains('.') == false) {
+      return 'please provide a valid email';
     } else {
       return null;
     }

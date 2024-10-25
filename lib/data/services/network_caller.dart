@@ -16,10 +16,13 @@ class NetworkCaller {
         return NetworkModel(
           statusCode: response.statusCode,
           isSuccess: true,
-          message: decodeData,
+          message: decodeData['data'],
         );
       } else {
-        return NetworkModel(statusCode: response.statusCode, isSuccess: false);
+        return NetworkModel(
+            statusCode: response.statusCode,
+            isSuccess: false,
+            errorMessage: jsonDecode(response.body)['data']);
       }
     } catch (e) {
       return NetworkModel(
@@ -46,7 +49,7 @@ class NetworkCaller {
             errorMessage: decodeData['data'],
           );
         }
-        
+
         return NetworkModel(
           statusCode: response.statusCode,
           isSuccess: true,
@@ -64,7 +67,6 @@ class NetworkCaller {
           statusCode: -1, isSuccess: false, errorMessage: e.toString());
     }
   }
-
 
   // DEBUG PRINT
   static void printDebug(String url, Response response) {
