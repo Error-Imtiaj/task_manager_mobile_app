@@ -8,7 +8,7 @@ import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
 import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
-import 'package:task_manager_mobile_app/auth/auth.dart';
+
 import 'package:task_manager_mobile_app/data/model/network_response.dart';
 import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
@@ -176,7 +176,7 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
   _nameValidator(String? value) {
     if (value!.isEmpty) {
       return 'Field must not be empty';
-    } else if (value!.contains('@') == false || value!.contains('.') == false) {
+    } else if (value.contains('@') == false || value.contains('.') == false) {
       return 'please provide a valid email';
     } else {
       return null;

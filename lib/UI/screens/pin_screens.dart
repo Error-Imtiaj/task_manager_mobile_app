@@ -201,9 +201,9 @@ class _PinScreensState extends State<PinScreens> {
   Widget _verifyPin() {
     return PinCodeTextField(
       validator: (value) {
-        if (value!.isEmpty || value!.length < 6) {
+        if (value!.isEmpty || value.length < 6) {
           return 'Please enter 6 digit OTP';
-        } else if (value!.contains(RegExp(r'[0-9]')) == false) {
+        } else if (value.contains(RegExp(r'[0-9]')) == false) {
           return 'Pin only contains numbers';
         } else {
           return null;

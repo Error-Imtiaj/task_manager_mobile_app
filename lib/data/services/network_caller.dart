@@ -54,6 +54,7 @@ class NetworkCaller {
           statusCode: response.statusCode,
           isSuccess: true,
           message: decodeData['data'],
+          fullBody: decodeData
         );
       } else {
         final decodeData = jsonDecode(response.body);

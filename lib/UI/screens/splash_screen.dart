@@ -21,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Auth.getToken();
     await Auth.getOnboard();
     if (Auth.isLoggedIn()) {
+      Auth.getUserDataCache();
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const NavigationScreen()));
     } else {

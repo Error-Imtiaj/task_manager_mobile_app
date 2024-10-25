@@ -231,11 +231,11 @@ class _LoginScreenState extends State<LoginScreen> {
     _isProgress = false;
     setState(() {});
     if (response.isSuccess) {
-      final data = response.message['data'];
-      final myMap = data[0];
+      final _fullbody = response.fullBody;
+      final myMap = response.message[0];
       await Auth.setUserDataCache(myMap['email'], myMap['firstName']);
       await Auth.getUserDataCache();
-      await Auth.saveToken(response.message['token']);
+      await Auth.saveToken(_fullbody['token']);
       showSnackBar(context, "You have successfully signed in");
       _navigateToDashboard();
     } else {
