@@ -53,7 +53,7 @@ class NetworkCaller {
         return NetworkModel(
           statusCode: response.statusCode,
           isSuccess: true,
-          message: decodeData,
+          message: decodeData['data'],
         );
       } else {
         final decodeData = jsonDecode(response.body);

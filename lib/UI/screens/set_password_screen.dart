@@ -3,11 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
+import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
+import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
+import 'package:task_manager_mobile_app/data/model/network_response.dart';
+import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class SetPasswordScreen extends StatefulWidget {
-  const SetPasswordScreen({super.key});
+  final String email;
+  final String otp;
+  const SetPasswordScreen({super.key, required this.email, required this.otp});
 
   @override
   State<SetPasswordScreen> createState() => _SetPasswordScreenState();
@@ -16,6 +22,8 @@ class SetPasswordScreen extends StatefulWidget {
 class _SetPasswordScreenState extends State<SetPasswordScreen> {
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _confirmPassController = TextEditingController();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -57,9 +65,10 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
             Text(
               "Minimum number of password should be 6 digits",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  color: Colors.grey,
-                  fontSize: 14),
+                    fontWeight: FontWeight.w900,
+                    color: Colors.grey,
+                    fontSize: 14,
+                  ),
             ),
             const SizedBox(
               height: 20,
@@ -77,49 +86,65 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
             ),
 
             // CONFIRM PASSWORD FIELD
-            Textfieldwidget(
-              fillColor: ColorsUtils.fieldPrimaryColor,
-              controller: _confirmPassController,
-              hintText: "Confirm Password",
-              validatorFunction: (p0) => _validator(p0),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            // BUTTON SET PASSWORD
-            Custombutton(
-              ButtonName: "Set Password",
-              ontap: () {},
+            Form(
+              key: _formkey,
+              child: Textfieldwidget(
+                fillColor: ColorsUtils.fieldPrimaryColor,
+                controller: _confirmPassController,
+                hintText: "Confirm Password",
+                validatorFunction: (p0) => _validator2(p0),
+              ),
             ),
             const SizedBox(
               height: 20,
             ),
-
-            // SIGN IN
-            Center(
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                        text: "Have Account?",
-                        style: GoogleFonts.poppins(
-                            color: ColorsUtils.primaryColor)),
-                    TextSpan(
-                      text: " Log in",
-                      style: GoogleFonts.poppins(
-                          color: ColorsUtils.primaryColor,
-                          fontWeight: FontWeight.bold),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = _navigateToSignInPage,
-                    ),
-                  ],
-                ),
+            // BUTTON SET PASSWORD
+            Visibility(
+              visible: !_isLoading,
+              replacement: const Center(
+                child: CircularProgressIndicator(),
+              ),
+              child: Custombutton(
+                ButtonName: "Set Password",
+                ontap: () {
+                  if (_formkey.currentState!.validate()) {
+                    _setPassword();
+                  }
+                },
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future _setPassword() async {
+    try {
+      _isLoading = true;
+      setState(() {});
+      Map<String, dynamic> body = {
+        "email": widget.email,
+        "OTP": widget.otp,
+        "password": _passController.text,
+      };
+      NetworkModel setPasswordResponse = await NetworkCaller.postRequest(
+        url: Urls.setPassUrl,
+        body: body,
+      );
+      _isLoading = false;
+      setState(() {});
+      if (setPasswordResponse.statusCode == 200) {
+        showSnackBar(context, setPasswordResponse.message);
+        _navigateToSignInPage();
+      } else {
+        showSnackBar(context, setPasswordResponse.errorMessage);
+      }
+    } catch (e) {
+      _isLoading = false;
+      setState(() {});
+      showSnackBar(context, e.toString());
+    }
   }
 
   void _navigateToSignInPage() {
@@ -135,6 +160,20 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
       return 'Field must not be empty';
     } else if (value.length <= 8) {
       return 'Input must be more than 8 character';
+    } else {
+      return null;
+    }
+  }
+
+  _validator2(
+    String? value,
+  ) {
+    if (value!.isEmpty) {
+      return 'Field must not be empty';
+    } else if (value.length <= 8) {
+      return 'Input must be more than 8 character';
+    } else if (_passController.text != _confirmPassController.text) {
+      return 'Password do not match';
     } else {
       return null;
     }

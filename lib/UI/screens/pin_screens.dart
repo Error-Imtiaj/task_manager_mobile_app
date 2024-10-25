@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -188,8 +189,13 @@ class _PinScreensState extends State<PinScreens> {
   }
 
   void _navigateToSetPass() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const SetPasswordScreen()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SetPasswordScreen(
+                  email: widget.email,
+                  otp: pinController.text,
+                )));
   }
 
   Widget _verifyPin() {
