@@ -21,6 +21,7 @@ class ResetPassScreen extends StatefulWidget {
 
 class _ResetPassScreenState extends State<ResetPassScreen> {
   final TextEditingController emailController = TextEditingController();
+  bool _isLoading = false;
   @override
   void dispose() {
     // TODO: implement dispose
@@ -86,13 +87,19 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                 ),
 
                 // BUTTON
-                Custombutton(
-                  ButtonName: "Send verification Code",
-                  ontap: () {
-                    if (fromkey.currentState!.validate()) {
-                      _sendVerificationMail();
-                    }
-                  },
+                Visibility(
+                  visible: !_isLoading,
+                  replacement: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  child: Custombutton(
+                    ButtonName: "Send verification Code",
+                    ontap: () {
+                      if (fromkey.currentState!.validate()) {
+                        _sendVerificationMail();
+                      }
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
@@ -134,15 +141,21 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
 
   void _navigateToPinVerifyPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return  PinScreens(email: emailController.text.trim(),);
+      return PinScreens(
+        email: emailController.text.trim(),
+      );
     }));
   }
 
   Future _sendVerificationMail() async {
+    _isLoading = true;
+    setState(() {});
     try {
       NetworkModel sendMailResponse = await NetworkCaller.getRequest(
         url: '${Urls.sendOtpToEmailUrl}/${emailController.text.trim()}',
       );
+      _isLoading = false;
+      setState(() {});
       if (sendMailResponse.statusCode == 200) {
         showSnackBar(
           context,
@@ -154,6 +167,8 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
         showSnackBar(context, sendMailResponse.errorMessage, true);
       }
     } catch (e) {
+      _isLoading = false;
+      setState(() {});
       showSnackBar(context, e.toString(), true);
     }
   }

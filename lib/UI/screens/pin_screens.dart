@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager_mobile_app/UI/screens/set_password_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/assetPath.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
@@ -22,6 +24,8 @@ class PinScreens extends StatefulWidget {
 class _PinScreensState extends State<PinScreens> {
   final TextEditingController pinController = TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey();
+  bool _inProgressVerify = false;
+  bool _resendAgain = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,17 +85,45 @@ class _PinScreensState extends State<PinScreens> {
               ),
 
               // BUTTON
-              Custombutton(
-                ButtonName: "Verify",
-                // TODO VERIFY
-                ontap: () {
-                  if (_formkey.currentState!.validate()) {
-                    _pinVerification();
-                  }
-                },
+              Visibility(
+                visible: !_inProgressVerify,
+                replacement: const Center(child: CircularProgressIndicator()),
+                child: Custombutton(
+                  ButtonName: "Verify",
+                  ontap: () {
+                    if (_formkey.currentState!.validate()) {
+                      _pinVerification();
+                    }
+                  },
+                ),
               ),
               const SizedBox(
                 height: 20,
+              ),
+              Visibility(
+                visible: !_resendAgain,
+                replacement: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                child: Center(
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "Haven't received the OTP? ",
+                            style: GoogleFonts.poppins(
+                                color: ColorsUtils.primaryColor)),
+                        TextSpan(
+                            text: " Send again",
+                            style: GoogleFonts.poppins(
+                                color: ColorsUtils.primaryColor,
+                                fontWeight: FontWeight.bold),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = _sendVerificationMail),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -100,18 +132,59 @@ class _PinScreensState extends State<PinScreens> {
     );
   }
 
+  Future _sendVerificationMail() async {
+    // LOADING START
+    _resendAgain = true;
+    setState(() {});
+    try {
+      NetworkModel sendMailResponse = await NetworkCaller.getRequest(
+        url: '${Urls.sendOtpToEmailUrl}/${widget.email}',
+      );
+      // LOADING END
+      _resendAgain = false;
+      setState(() {});
+      if (sendMailResponse.statusCode == 200) {
+        showSnackBar(
+          context,
+          sendMailResponse.message,
+          false,
+        );
+      } else {
+        showSnackBar(context, sendMailResponse.errorMessage, true);
+      }
+    } catch (e) {
+      // LOADING END
+      _resendAgain = false;
+      setState(() {});
+      showSnackBar(context, e.toString(), true);
+    }
+  }
+
   Future _pinVerification() async {
+    // LOADING START
+    _inProgressVerify = true;
+    setState(() {});
+
     try {
       NetworkModel pinVerifycall = await NetworkCaller.getRequest(
         url: '${Urls.pinVerifyUrl}/${widget.email}/${pinController.text}',
       );
+      // LOADING END
+      _inProgressVerify = false;
+      setState(() {});
       if (pinVerifycall.statusCode == 200) {
         showSnackBar(context, pinVerifycall.message, false);
         _navigateToSetPass();
       } else {
         showSnackBar(context, pinVerifycall.errorMessage, true);
       }
-    } catch (e) {}
+    } catch (e) {
+      // LOADING END
+      _inProgressVerify = false;
+      setState(() {});
+      // SHOW THE ERROR
+      showSnackBar(context, e.toString(), true);
+    }
   }
 
   void _navigateToSetPass() {
@@ -124,6 +197,8 @@ class _PinScreensState extends State<PinScreens> {
       validator: (value) {
         if (value!.isEmpty || value!.length < 6) {
           return 'Please enter 6 digit OTP';
+        } else if (value!.contains(RegExp(r'[0-9]')) == false) {
+          return 'Pin only contains numbers';
         } else {
           return null;
         }
