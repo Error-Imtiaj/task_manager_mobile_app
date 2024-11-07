@@ -115,12 +115,13 @@ class _PinScreensState extends State<PinScreens> {
                             style: GoogleFonts.poppins(
                                 color: ColorsUtils.primaryColor)),
                         TextSpan(
-                            text: " Send again",
-                            style: GoogleFonts.poppins(
-                                color: ColorsUtils.primaryColor,
-                                fontWeight: FontWeight.bold),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = _sendVerificationMail),
+                          text: " Send again",
+                          style: GoogleFonts.poppins(
+                              color: ColorsUtils.primaryColor,
+                              fontWeight: FontWeight.bold),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = _sendVerificationMail,
+                        ),
                       ],
                     ),
                   ),
@@ -215,17 +216,20 @@ class _PinScreensState extends State<PinScreens> {
       obscureText: true,
       animationType: AnimationType.fade,
       pinTheme: PinTheme(
-          shape: PinCodeFieldShape.box,
-          borderRadius: BorderRadius.circular(5),
-          fieldHeight: 50,
-          fieldWidth: 40,
-          activeFillColor: Colors.transparent,
-          inactiveFillColor: ColorsUtils.fieldPrimaryColor,
-          activeColor: ColorsUtils.primaryColor,
-          inactiveColor: ColorsUtils.primaryColor,
-          selectedFillColor: Colors.transparent,
-          selectedColor: ColorsUtils.primaryColor),
-      animationDuration: const Duration(milliseconds: 300),
+        shape: PinCodeFieldShape.box,
+        borderRadius: BorderRadius.circular(5),
+        fieldHeight: 50,
+        fieldWidth: 40,
+        activeFillColor: Colors.transparent,
+        inactiveFillColor: ColorsUtils.fieldPrimaryColor,
+        activeColor: ColorsUtils.primaryColor,
+        inactiveColor: ColorsUtils.primaryColor,
+        selectedFillColor: Colors.transparent,
+        selectedColor: ColorsUtils.primaryColor,
+      ),
+      animationDuration: const Duration(
+        milliseconds: 300,
+      ),
       enableActiveFill: true,
       appContext: context,
       keyboardType: TextInputType.number,

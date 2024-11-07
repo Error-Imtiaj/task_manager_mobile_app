@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
+import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
+import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
+import 'package:task_manager_mobile_app/data/model/network_response.dart';
+import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key});
@@ -14,6 +18,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final _formkey = GlobalKey<FormState>();
   final TextEditingController _scontroller = TextEditingController();
   final TextEditingController _dcontroller = TextEditingController();
+  bool _assnewTask = false;
   @override
   void dispose() {
     // TODO: implement dispose
@@ -86,13 +91,19 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                Custombutton(
-                  ButtonName: "Add Task",
-                  ontap: () {
-                    if (_formkey.currentState!.validate()) {
-                      _addtask();
-                    }
-                  },
+                Visibility(
+                  visible: !_assnewTask,
+                  replacement: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  child: Custombutton(
+                    ButtonName: "Add Task",
+                    ontap: () {
+                      if (_formkey.currentState!.validate()) {
+                        _addtask();
+                      }
+                    },
+                  ),
                 )
               ],
             ),
@@ -111,5 +122,29 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   }
 
   //TODO ONTAP ADD TASK
-  void _addtask() {}
+  Future<void> _addtask() async {
+    _assnewTask = true;
+    setState(() {});
+    Map<String, dynamic> data = {
+      "title": _scontroller.text,
+      "description": _dcontroller.text,
+      "status": "New"
+    };
+    NetworkModel response =
+        await NetworkCaller.postRequest(url: Urls.createTaskUrl, body: data);
+
+    if (response.isSuccess) {
+      _clearText();
+      showSnackBar(context, response.message);
+    } else {
+      showSnackBar(context, response.errorMessage.toString(), true);
+    }
+    _assnewTask = false;
+    setState(() {});
+  }
+
+  void _clearText() {
+    _scontroller.clear();
+    _dcontroller.clear();
+  }
 }

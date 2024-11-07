@@ -232,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {});
     if (response.isSuccess) {
       final _fullbody = response.fullBody;
-      final myMap = response.message[0];
+      final myMap = response.message;
       await Auth.setUserDataCache(myMap['email'], myMap['firstName']);
       await Auth.getUserDataCache();
       await Auth.saveToken(_fullbody['token']);
