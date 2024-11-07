@@ -9,11 +9,11 @@ import 'package:task_manager_mobile_app/data/model/network_response.dart';
 
 class NetworkCaller {
   // GET REQUEST
-  static Future<NetworkModel> getRequest({required String url}) async {
+  static Future<NetworkModel> getRequest({required String url, Map<String,String>? headers}) async {
     try {
       Uri uri = Uri.parse(url);
       debugPrint(url);
-      Response response = await get(uri);
+      Response response = await get(uri, headers:headers );
       printDebug(url, response);
       if (response.statusCode == 200) {
         final decodeData = jsonDecode(response.body);
@@ -21,6 +21,13 @@ class NetworkCaller {
           statusCode: response.statusCode,
           isSuccess: true,
           message: decodeData['data'],
+        );
+      } else if (response.statusCode == 401) {
+        _moveToLogin();
+        return NetworkModel(
+          statusCode: response.statusCode,
+          isSuccess: false,
+          errorMessage: "Unauthorized",
         );
       } else {
         return NetworkModel(

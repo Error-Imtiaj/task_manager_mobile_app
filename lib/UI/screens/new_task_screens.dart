@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 
 import 'package:task_manager_mobile_app/UI/widgets/card_widget.dart';
+import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/taskTile_widget.dart';
+import 'package:task_manager_mobile_app/auth/auth.dart';
+import 'package:task_manager_mobile_app/data/model/network_response.dart';
+import 'package:task_manager_mobile_app/data/model/new_task_list.dart';
+import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class NewTaskScreens extends StatefulWidget {
   const NewTaskScreens({super.key});
@@ -11,6 +19,16 @@ class NewTaskScreens extends StatefulWidget {
 }
 
 class _NewTaskScreensState extends State<NewTaskScreens> {
+  List<NewTaskList> allNewTaskList = [];
+  bool _fetchingTask = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchTask();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,27 +45,32 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
           ),
 
           // TASK ITEMS
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: ListView.separated(
-              itemCount: 15,
-              itemBuilder: (context, index) {
-                return const TasktileWidget(
-                  title: "Lorem Ipsum Title Text",
-                  description:
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor e ere grgehg ukhueru ",
-                  date: "16/11/2003",
-                  chipText: "New",
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(
-                  height: 8,
-                );
-              },
+          Visibility(
+            visible: !_fetchingTask,
+            replacement: Center(
+              child: CircularProgressIndicator(),
             ),
-          ))
+            child: Expanded(
+                child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: ListView.separated(
+                itemCount: allNewTaskList.length,
+                itemBuilder: (context, index) {
+                  return TasktileWidget(
+                    title: allNewTaskList[index].title,
+                    description: allNewTaskList[index].description,
+                    date: allNewTaskList[index].createdDate,
+                    chipText: allNewTaskList[index].status!,
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(
+                    height: 8,
+                  );
+                },
+              ),
+            )),
+          )
         ],
       ),
     );
@@ -76,5 +99,32 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
         ),
       ],
     );
+  }
+
+  // FETCH TASK
+  Future<void> fetchTask() async {
+    _fetchingTask = true;
+    setState(() {});
+    allNewTaskList.clear();
+    Map<String, String> head = {
+      'Content-Type': 'application/json',
+      'token': Auth.myToken.toString()
+    };
+
+    NetworkModel response = await NetworkCaller.getRequest(
+      url: Urls.newTaskUrl,
+      headers: head,
+    );
+
+    if (response.isSuccess) {
+      List data = response.message;
+      for (var i in data) {
+        allNewTaskList.add(NewTaskList.fromJson(i));
+      }
+    } else {
+      showSnackBar(context, response.errorMessage, true);
+    }
+    _fetchingTask = false;
+    setState(() {});
   }
 }
