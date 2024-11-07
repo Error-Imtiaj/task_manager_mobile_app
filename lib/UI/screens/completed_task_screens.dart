@@ -49,6 +49,7 @@ List<NewTaskList> allNewTaskList = [];
                     date: allNewTaskList[index].createdDate,
                     chipText: allNewTaskList[index].status!,
                     callback: () => deleteTask(allNewTaskList[index].id),
+                    id: allNewTaskList[index].id,
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {

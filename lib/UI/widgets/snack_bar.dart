@@ -7,9 +7,9 @@ void showSnackBar(BuildContext context, String message,
     SnackBar(
       content: Text(
         message,
-        style: TextStyle(color: isError ? Colors.white : Colors.black),
+        style: TextStyle(color: isError ? Colors.white : Colors.white),
       ),
-      backgroundColor: isError ? Colors.red : ColorsUtils.fieldPrimaryColor,
+      backgroundColor: isError ? Colors.red : ColorsUtils.primaryColor,
     ),
   );
 }
