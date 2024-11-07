@@ -61,6 +61,7 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
                     description: allNewTaskList[index].description,
                     date: allNewTaskList[index].createdDate,
                     chipText: allNewTaskList[index].status!,
+                    callback: () => deleteTask(allNewTaskList[index].id),
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
@@ -126,5 +127,24 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
     }
     _fetchingTask = false;
     setState(() {});
+  }
+
+  // DELETE TASK
+  Future<void> deleteTask(String? id) async {
+    Map<String, String> head = {
+      'Content-Type': 'application/json',
+      'token': Auth.myToken.toString()
+    };
+
+    NetworkModel response = await NetworkCaller.getRequest(
+      url: '${Urls.deleteTaskUrl}/${id}',
+      headers: head,
+    );
+    if (response.isSuccess) {
+      fetchTask();
+      showSnackBar(context, "Task Successfully Deleted");
+    } else {
+      showSnackBar(context, response.errorMessage, true);
+    }
   }
 }

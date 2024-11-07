@@ -7,12 +7,14 @@ class TasktileWidget extends StatefulWidget {
   final String? description;
   final String? date;
   final String chipText;
+  final Function() callback;
   const TasktileWidget(
       {super.key,
       this.title,
       this.description,
       this.date,
-      required this.chipText});
+      required this.chipText,
+      required this.callback});
 
   @override
   State<TasktileWidget> createState() => _TasktileWidgetState();
@@ -77,7 +79,9 @@ class _TasktileWidgetState extends State<TasktileWidget> {
                           color: ColorsUtils.primaryColor,
                         )),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          widget.callback();
+                        },
                         icon: const Icon(
                           Icons.delete,
                           color: ColorsUtils.pinkColor,
