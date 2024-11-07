@@ -4,6 +4,7 @@ import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
 import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
+import 'package:task_manager_mobile_app/auth/auth.dart';
 import 'package:task_manager_mobile_app/data/model/network_response.dart';
 import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
@@ -130,12 +131,18 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       "description": _dcontroller.text,
       "status": "New"
     };
-    NetworkModel response =
-        await NetworkCaller.postRequest(url: Urls.createTaskUrl, body: data);
+
+    Map<String, String> head = {
+      'Content-Type': 'application/json',
+      'token': Auth.myToken.toString()
+    };
+
+    NetworkModel response = await NetworkCaller.postRequest(
+        url: Urls.createTaskUrl, body: data, header: head);
 
     if (response.isSuccess) {
       _clearText();
-      showSnackBar(context, response.message);
+      showSnackBar(context, "Task created successfully");
     } else {
       showSnackBar(context, response.errorMessage.toString(), true);
     }

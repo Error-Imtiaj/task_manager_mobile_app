@@ -7,9 +7,8 @@ class Urls {
   static const String pinVerifyUrl = '$_baseurl/RecoverVerifyOtp';
   static const String setPassUrl = '$_baseurl/RecoverResetPassword';
 
-
-
   static const String createTaskUrl = '$_baseurl/createTask';
-
-
+  static const String newTaskUrl = '$_baseurl/listTaskByStatus/New';
+  static const String completedTaskUrl = '$_baseurl/listTaskByStatus/Completed';
+  static const String canceledTaskUrl = '$_baseurl/listTaskByStatus/Canceled';
 }
