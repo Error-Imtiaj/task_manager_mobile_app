@@ -20,6 +20,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final TextEditingController _scontroller = TextEditingController();
   final TextEditingController _dcontroller = TextEditingController();
   bool _assnewTask = false;
+  bool shouldRefreshprivpage = false;
   @override
   void dispose() {
     // TODO: implement dispose
@@ -30,83 +31,94 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // APPBAR
-      appBar: AppBar(
-        backgroundColor: ColorsUtils.primaryColor,
-        title: Text(
-          "Add new task",
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: ColorsUtils.backGroundColor, fontWeight: FontWeight.bold),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          return;
+        } else {
+          Navigator.pop(context, shouldRefreshprivpage);
+        }
+      },
+      child: Scaffold(
+        // APPBAR
+        appBar: AppBar(
+          backgroundColor: ColorsUtils.primaryColor,
+          title: Text(
+            "Add new task",
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: ColorsUtils.backGroundColor,
+                fontWeight: FontWeight.bold),
+          ),
+          iconTheme: const IconThemeData(color: ColorsUtils.backGroundColor),
         ),
-        iconTheme: const IconThemeData(color: ColorsUtils.backGroundColor),
-      ),
 
-      // BODY
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formkey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 30,
-                ),
-                // ADD NEW TASK TITLE
-                Text(
-                  "Add New Task",
-                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: ColorsUtils.primaryColor),
-                ),
-
-                // SUBJECT TEXT FIELD
-                const SizedBox(
-                  height: 30,
-                ),
-                Textfieldwidget(
-                  fillColor: ColorsUtils.fieldPrimaryColor,
-                  controller: _scontroller,
-                  hintText: "Subject",
-                  Borderradias: BorderRadius.circular(10),
-                  validatorFunction: (p0) => _nameValidator(p0),
-                ),
-
-                // DESCRIPTION TEXT FIELD
-                const SizedBox(
-                  height: 20,
-                ),
-                Textfieldwidget(
-                  fillColor: ColorsUtils.fieldPrimaryColor,
-                  controller: _dcontroller,
-                  hintText: "Description",
-                  Borderradias: BorderRadius.circular(10),
-                  maxlength: 1000,
-                  maxline: 7,
-                  validatorFunction: (p0) => _nameValidator(p0),
-                ),
-
-                // BUTTON
-                const SizedBox(
-                  height: 20,
-                ),
-                Visibility(
-                  visible: !_assnewTask,
-                  replacement: Center(
-                    child: CircularProgressIndicator(),
+        // BODY
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formkey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 30,
                   ),
-                  child: Custombutton(
-                    ButtonName: "Add Task",
-                    ontap: () {
-                      if (_formkey.currentState!.validate()) {
-                        _addtask();
-                      }
-                    },
+                  // ADD NEW TASK TITLE
+                  Text(
+                    "Add New Task",
+                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: ColorsUtils.primaryColor),
                   ),
-                )
-              ],
+
+                  // SUBJECT TEXT FIELD
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Textfieldwidget(
+                    fillColor: ColorsUtils.fieldPrimaryColor,
+                    controller: _scontroller,
+                    hintText: "Subject",
+                    Borderradias: BorderRadius.circular(10),
+                    validatorFunction: (p0) => _nameValidator(p0),
+                  ),
+
+                  // DESCRIPTION TEXT FIELD
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Textfieldwidget(
+                    fillColor: ColorsUtils.fieldPrimaryColor,
+                    controller: _dcontroller,
+                    hintText: "Description",
+                    Borderradias: BorderRadius.circular(10),
+                    maxlength: 1000,
+                    maxline: 7,
+                    validatorFunction: (p0) => _nameValidator(p0),
+                  ),
+
+                  // BUTTON
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Visibility(
+                    visible: !_assnewTask,
+                    replacement: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    child: Custombutton(
+                      ButtonName: "Add Task",
+                      ontap: () {
+                        if (_formkey.currentState!.validate()) {
+                          _addtask();
+                        }
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -143,6 +155,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
     if (response.isSuccess) {
       _clearText();
       showSnackBar(context, "Task created successfully");
+      shouldRefreshprivpage = true;
     } else {
       showSnackBar(context, response.errorMessage.toString(), true);
     }

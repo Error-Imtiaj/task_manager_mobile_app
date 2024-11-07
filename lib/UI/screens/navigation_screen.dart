@@ -59,21 +59,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
         ],
       ),
       // ADD TASK BUTTON
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: ColorsUtils.primaryColor,
-        onPressed: () {
-          _navigateToAddNewTaskScreen();
-        },
-        child: const Icon(
-          Icons.add,
-          color: ColorsUtils.backGroundColor,
-        ),
-      ),
     );
-  }
-
-  void _navigateToAddNewTaskScreen() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const AddNewTaskScreen()));
   }
 }

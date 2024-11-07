@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:task_manager_mobile_app/UI/screens/add_new_task_screen.dart';
+import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 
 import 'package:task_manager_mobile_app/UI/widgets/card_widget.dart';
@@ -75,7 +77,25 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
           )
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: ColorsUtils.primaryColor,
+        onPressed: () {
+          _navigateToAddNewTaskScreen();
+        },
+        child: const Icon(
+          Icons.add,
+          color: ColorsUtils.backGroundColor,
+        ),
+      ),
     );
+  }
+
+  void _navigateToAddNewTaskScreen() async {
+    bool shouldRefresh = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AddNewTaskScreen()));
+    if (shouldRefresh) {
+      fetchTask();
+    }
   }
 
   // TASK HERO ECTION
