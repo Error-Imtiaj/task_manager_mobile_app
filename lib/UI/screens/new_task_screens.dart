@@ -11,6 +11,7 @@ import 'package:task_manager_mobile_app/UI/widgets/taskTile_widget.dart';
 import 'package:task_manager_mobile_app/auth/auth.dart';
 import 'package:task_manager_mobile_app/data/model/network_response.dart';
 import 'package:task_manager_mobile_app/data/model/new_task_list.dart';
+import 'package:task_manager_mobile_app/data/model/task_ststus_count_model.dart';
 import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class NewTaskScreens extends StatefulWidget {
@@ -22,13 +23,16 @@ class NewTaskScreens extends StatefulWidget {
 
 class _NewTaskScreensState extends State<NewTaskScreens> {
   List<NewTaskList> allNewTaskList = [];
+  List<TaskStstusCountModel> taskStatusLists = [];
   bool _fetchingTask = false;
+  bool _fetchingTaskstatus = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     fetchTask();
+    fetchTaskstatus();
   }
 
   @override
@@ -38,11 +42,18 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
       body: Column(
         children: [
           // CARD DETAILS
-          Container(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: _heroSection(),
+          Visibility(
+            visible: !_fetchingTaskstatus,
+            replacement: Center(
+              child: CircularProgressIndicator(),
+            ),
+            child: Container(
+              color: Colors.white,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: _heroSection(),
+              ),
             ),
           ),
 
@@ -98,26 +109,70 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
     }
   }
 
-  // TASK HERO ECTION
+  // FETCH TASK STATUS COUNT
+  Future<void> fetchTaskstatus() async {
+    _fetchingTaskstatus = true;
+    setState(() {});
+    taskStatusLists.clear();
+
+    Map<String, String> head = {
+      'Content-Type': 'application/json',
+      'token': Auth.myToken.toString()
+    };
+
+    NetworkModel response = await NetworkCaller.getRequest(
+      url: Urls.tastStatusCountUrl,
+      headers: head,
+    );
+
+    if (response.isSuccess) {
+      for (var element in response.message) {
+        taskStatusLists.add(TaskStstusCountModel.fromJson(element));
+      }
+    } else {
+      showSnackBar(context, response.errorMessage, true);
+    }
+
+    _fetchingTaskstatus = false;
+    setState(() {});
+  }
+
+  // Hero sections
   Widget _heroSection() {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         CardWidget(
-          count: '09',
-          title: 'New Task',
+          count: taskStatusLists.isNotEmpty && taskStatusLists.length > 2
+              ? taskStatusLists[2].sum.toString()
+              : '0', // Default or placeholder
+          title: taskStatusLists.isNotEmpty && taskStatusLists.length > 2
+              ? taskStatusLists[2].id.toString()
+              : 'New', // Default or placeholder
         ),
         CardWidget(
-          count: '09',
-          title: 'Completed',
+          count: taskStatusLists.isNotEmpty && taskStatusLists.length > 3
+              ? taskStatusLists[3].sum.toString()
+              : '0',
+          title: taskStatusLists.isNotEmpty && taskStatusLists.length > 3
+              ? taskStatusLists[3].id.toString()
+              : 'Unknown',
         ),
         CardWidget(
-          count: '09',
-          title: 'Cancelled',
+          count: taskStatusLists.isNotEmpty && taskStatusLists.length > 0
+              ? taskStatusLists[0].sum.toString()
+              : '0',
+          title: taskStatusLists.isNotEmpty && taskStatusLists.length > 0
+              ? taskStatusLists[0].id.toString()
+              : 'Progress',
         ),
         CardWidget(
-          count: '09',
-          title: 'Progress',
+          count: taskStatusLists.isNotEmpty && taskStatusLists.length > 1
+              ? taskStatusLists[1].sum.toString()
+              : '0',
+          title: taskStatusLists.isNotEmpty && taskStatusLists.length > 1
+              ? taskStatusLists[1].id.toString()
+              : 'Canceled',
         ),
       ],
     );
