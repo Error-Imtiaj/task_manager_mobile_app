@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
+import 'package:get/get.dart';
+import 'package:task_manager_mobile_app/UI/controller/profile_update_controller.dart';
+import 'package:task_manager_mobile_app/UI/screens/navigation_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
+import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
 import 'package:task_manager_mobile_app/UI/widgets/tm_Appbar.dart';
 
 class ProfileScreen extends StatefulWidget {
+  static const String text = '/updateProfile';
   const ProfileScreen({super.key});
 
   @override
@@ -19,6 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController lnameController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
   final TextEditingController passController = TextEditingController();
+  final _profileUpdateController = Get.find<ProfileUpdateController>();
 
   @override
   void dispose() {
@@ -63,14 +68,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
 
                 // BUTTON
-                Custombutton(
-                  ButtonName: "Update",
-                  ontap: () {
-                    if (_formKey.currentState!.validate()) {
-                      _updateProfile();
-                    }
-                  },
-                ),
+                GetBuilder<ProfileUpdateController>(builder: (context) {
+                  return Visibility(
+                    visible: !context.inProgress,
+                    replacement: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    child: Custombutton(
+                      ButtonName: "Update",
+                      ontap: () {
+                        if (_formKey.currentState!.validate()) {
+                          _updateProfile();
+                        }
+                      },
+                    ),
+                  );
+                }),
               ],
             ),
           ),
@@ -135,9 +148,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ));
   }
 
-  void _updateProfile() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const LoginScreen();
-    }));
+  void _navigateToDashboard() {
+    Get.toNamed(NavigationScreen.text);
+  }
+
+  Future<void> _updateProfile() async {
+    final bool result = await _profileUpdateController.updateProfile(
+      emailController.text.trim(),
+      fnameController.text,
+      lnameController.text,
+      numberController.text,
+      passController.text,
+    );
+    if (result) {
+      showSnackBar(context, "Your profile has been successfully updated");
+      _navigateToDashboard();
+    } else {
+      showSnackBar(context, _profileUpdateController.errorMessage!);
+    }
   }
 }

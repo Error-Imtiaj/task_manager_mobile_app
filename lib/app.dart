@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/navigation_screen.dart';
+import 'package:task_manager_mobile_app/UI/screens/profile_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/reset_pass_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/signup_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/splash_screen.dart';
@@ -23,15 +24,16 @@ class _TaskMangerAppState extends State<TaskMangerApp> {
       debugShowCheckedModeBanner: false,
       navigatorKey: TaskMangerApp.navigatorKey,
       theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
-     // home: const SplashScreen(),
+      // home: const SplashScreen(),
       initialBinding: ControllerBinders(),
       initialRoute: SplashScreen.text,
       routes: {
-        NavigationScreen.text:(context) => const NavigationScreen(),
+        NavigationScreen.text: (context) => const NavigationScreen(),
         SplashScreen.text: (context) => const SplashScreen(),
         LoginScreen.text: (context) => const LoginScreen(),
         SignupScreen.text: (context) => const SignupScreen(),
-        ResetPassScreen.text : (context) => const ResetPassScreen(),
+        ResetPassScreen.text: (context) => const ResetPassScreen(),
+        ProfileScreen.text: (context) => const ProfileScreen(),
       },
     );
   }
