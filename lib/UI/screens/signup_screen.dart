@@ -11,6 +11,7 @@ import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
 
 class SignupScreen extends StatefulWidget {
+  static const String text = '/signUp';
   const SignupScreen({super.key});
 
   @override
@@ -25,7 +26,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController numberController = TextEditingController();
   final TextEditingController passController = TextEditingController();
   final _signUpController = Get.find<SignupController>();
-  bool _inProgress = false;
 
   @override
   void dispose() {
@@ -190,8 +190,8 @@ class _SignupScreenState extends State<SignupScreen> {
   Future<void> _signUp() async {
     final bool result = await _signUpController.signUp(
       emailController.text.trim(),
-      fnameController.text,
-      lnameController.text,
+      fnameController.text.trim(),
+      lnameController.text.trim(),
       numberController.text,
       passController.text,
     );
@@ -211,7 +211,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void _navigateToSignInPage() {
-    Get.offAll(LoginScreen.text);
+    Get.toNamed(LoginScreen.text);
   }
 
   _validator(

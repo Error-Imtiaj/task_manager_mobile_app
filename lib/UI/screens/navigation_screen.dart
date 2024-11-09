@@ -8,6 +8,7 @@ import 'package:task_manager_mobile_app/UI/widgets/navigation_distanations.dart'
 import 'package:task_manager_mobile_app/UI/widgets/tm_Appbar.dart';
 
 class NavigationScreen extends StatefulWidget {
+  static const String text = '/dashboard';
   const NavigationScreen({super.key});
 
   @override

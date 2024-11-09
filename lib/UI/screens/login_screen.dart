@@ -1,20 +1,19 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:task_manager_mobile_app/UI/controller/signin_controller.dart';
 import 'package:task_manager_mobile_app/UI/screens/navigation_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/reset_pass_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/signup_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/assetPath.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
-import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/circle_widget.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
 import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
-import 'package:task_manager_mobile_app/auth/auth.dart';
-import 'package:task_manager_mobile_app/data/model/network_response.dart';
-import 'package:task_manager_mobile_app/data/services/network_caller.dart';
+
 
 class LoginScreen extends StatefulWidget {
   static const String text = '/login';
@@ -25,11 +24,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
-  bool _isProgress = false;
+  final _loginController = Get.find<SigninController>();
 
   @override
   void dispose() {
@@ -56,18 +54,20 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 30,
             ),
             // button
-            Visibility(
-              visible: !_isProgress,
-              replacement: Center(child: CircularProgressIndicator()),
-              child: Custombutton(
-                ButtonName: "Sign In",
-                ontap: () {
-                  if (_formKey.currentState!.validate()) {
-                    signIn();
-                  }
-                },
-              ),
-            ),
+            GetBuilder<SigninController>(builder: (context) {
+              return Visibility(
+                visible: !context.inProgress,
+                replacement: Center(child: CircularProgressIndicator()),
+                child: Custombutton(
+                  ButtonName: "Sign In",
+                  ontap: () {
+                    if (_formKey.currentState!.validate()) {
+                      signIn();
+                    }
+                  },
+                ),
+              );
+            }),
             const SizedBox(
               height: 10,
             ),
@@ -182,23 +182,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _navigateToForgotPage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const ResetPassScreen();
-    }));
+    Get.toNamed(ResetPassScreen.text);
   }
 
   void _navigateToSignUpPage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const SignupScreen();
-    }));
+    Get.toNamed(SignupScreen.text);
   }
 
   void _navigateToDashboard() {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => const NavigationScreen()),
-        (value) {
-      return false;
-    });
+    Get.toNamed(NavigationScreen.text);
   }
 
   _nameValidator(String? value) {
@@ -222,26 +214,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signIn() async {
-    _isProgress = true;
-    setState(() {});
-    Map<String, dynamic> body = {
-      "email": emailController.text.trim(),
-      "password": passController.text
-    };
-    final NetworkModel response =
-        await NetworkCaller.postRequest(url: Urls.signInUrl, body: body);
-    _isProgress = false;
-    setState(() {});
-    if (response.isSuccess) {
-      final _fullbody = response.fullBody;
-      final myMap = response.message;
-      await Auth.setUserDataCache(myMap['email'], myMap['firstName']);
-      await Auth.getUserDataCache();
-      await Auth.saveToken(_fullbody['token']);
+    final bool result = await _loginController.signIn(
+        emailController.text.trim(), passController.text);
+    if (result) {
       showSnackBar(context, "You have successfully signed in");
       _navigateToDashboard();
     } else {
-      showSnackBar(context, response.errorMessage, true);
+      showSnackBar(context, _loginController.errorMessage!, true);
     }
   }
 }

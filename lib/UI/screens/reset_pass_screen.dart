@@ -13,6 +13,7 @@ import 'package:task_manager_mobile_app/data/model/network_response.dart';
 import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class ResetPassScreen extends StatefulWidget {
+  static const String text = '/resetPassword';
   const ResetPassScreen({super.key});
 
   @override

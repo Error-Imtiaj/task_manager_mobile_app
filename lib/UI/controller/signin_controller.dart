@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
 import 'package:task_manager_mobile_app/UI/utils/urls.dart';
+import 'package:task_manager_mobile_app/auth/auth.dart';
 import 'package:task_manager_mobile_app/data/model/network_response.dart';
 import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
-class SignupController extends GetxController {
+class SigninController extends GetxController {
   bool _inProgress = false;
   bool get inProgress => _inProgress;
   bool _isSuccess = false;
@@ -12,29 +13,23 @@ class SignupController extends GetxController {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  Future<bool> signUp(
-    String? email,
-    String? firstName,
-    String? lastName,
-    String? mobile,
-    String? password,
-  ) async {
+  Future<bool> signIn(String email, String password) async {
     _inProgress = true;
     update();
-    Map<String, dynamic> requestBody = {
-      "email": email,
-      "firstName": firstName,
-      "lastName": lastName,
-      "mobile": mobile,
-      "password": password
-    };
-    NetworkModel response = await NetworkCaller.postRequest(
-        url: Urls.registrationUrl, body: requestBody);
+    Map<String, dynamic> body = {"email": email, "password": password};
+    final NetworkModel response =
+        await NetworkCaller.postRequest(url: Urls.signInUrl, body: body);
     _inProgress = false;
     update();
     if (response.isSuccess) {
+      final _fullbody = response.fullBody;
+      final myMap = response.message;
+      await Auth.setUserDataCache(myMap['email'], myMap['firstName']);
+      await Auth.getUserDataCache();
+      await Auth.saveToken(_fullbody['token']);
       _isSuccess = true;
-    } else {
+    }
+    else{
       _errorMessage = response.errorMessage;
     }
     return _isSuccess;
