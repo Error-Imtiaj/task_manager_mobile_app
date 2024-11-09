@@ -17,6 +17,7 @@ import 'package:task_manager_mobile_app/data/model/network_response.dart';
 import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class LoginScreen extends StatefulWidget {
+  static const String text = '/login';
   const LoginScreen({super.key});
 
   @override
@@ -24,6 +25,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();

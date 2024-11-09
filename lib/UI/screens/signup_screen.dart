@@ -1,17 +1,14 @@
-import 'dart:ffi';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:task_manager_mobile_app/UI/controller/signup_controller.dart';
 import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
-import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/center_progress_indicate.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
 import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
-import 'package:task_manager_mobile_app/data/model/network_response.dart';
-import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -27,6 +24,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController lnameController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
   final TextEditingController passController = TextEditingController();
+  final _signUpController = Get.find<SignupController>();
   bool _inProgress = false;
 
   @override
@@ -77,16 +75,20 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
 
                 // BUTTON
-                Visibility(
-                  visible: !_inProgress,
-                  replacement: const CenterProgressIndicate(),
-                  child: Custombutton(
-                    ButtonName: "Sign Up",
-                    ontap: () {
-                      _next();
-                    },
-                  ),
-                ),
+                GetBuilder(
+                    init: _signUpController,
+                    builder: (context) {
+                      return Visibility(
+                        visible: !context.inProgress,
+                        replacement: const CenterProgressIndicate(),
+                        child: Custombutton(
+                          ButtonName: "Sign Up",
+                          ontap: () {
+                            _next();
+                          },
+                        ),
+                      );
+                    }),
                 const SizedBox(
                   height: 30,
                 ),
@@ -186,20 +188,15 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Future<void> _signUp() async {
-    _inProgress = true;
-    setState(() {});
-    Map<String, dynamic> requestBody = {
-      "email": emailController.text.trim(),
-      "firstName": fnameController.text.trim(),
-      "lastName": lnameController.text.trim(),
-      "mobile": numberController.text.trim(),
-      "password": passController.text.trim()
-    };
-    NetworkModel response = await NetworkCaller.postRequest(
-        url: Urls.registrationUrl, body: requestBody);
-    _inProgress = false;
-    setState(() {});
-    if (response.isSuccess) {
+    final bool result = await _signUpController.signUp(
+      emailController.text.trim(),
+      fnameController.text,
+      lnameController.text,
+      numberController.text,
+      passController.text,
+    );
+
+    if (result) {
       showSnackBar(context, "Congratulations! Your account has been created");
       _navigateToSignInPage();
       showSnackBar(context, "Please Sign in");
@@ -209,14 +206,12 @@ class _SignupScreenState extends State<SignupScreen> {
       numberController.clear();
       passController.clear();
     } else {
-      showSnackBar(context, response.errorMessage, true);
+      showSnackBar(context, _signUpController.errorMessage!, true);
     }
   }
 
   void _navigateToSignInPage() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-      return const LoginScreen();
-    }));
+    Get.offAll(LoginScreen.text);
   }
 
   _validator(

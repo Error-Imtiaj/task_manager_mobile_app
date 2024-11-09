@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/navigation_screen.dart';
-import 'package:task_manager_mobile_app/UI/screens/new_task_screens.dart';
 import 'package:task_manager_mobile_app/UI/screens/onboarding_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/assetPath.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 import 'package:task_manager_mobile_app/auth/auth.dart';
 
 class SplashScreen extends StatefulWidget {
+  static const String text = '/';
   const SplashScreen({super.key});
 
   @override
