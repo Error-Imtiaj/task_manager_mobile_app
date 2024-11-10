@@ -6,6 +6,7 @@ import 'package:task_manager_mobile_app/UI/utils/assetPath.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  static const String text = '/onBoardingScreen';
   const OnboardingScreen({super.key});
 
   @override
@@ -42,8 +43,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         backgroundColor: ColorsUtils.primaryColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         onPressed: () {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()));
         },
         child: const Icon(
           Icons.arrow_forward,

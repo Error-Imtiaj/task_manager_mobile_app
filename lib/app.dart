@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/navigation_screen.dart';
+import 'package:task_manager_mobile_app/UI/screens/onboarding_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/profile_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/reset_pass_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/signup_screen.dart';
@@ -34,6 +35,7 @@ class _TaskMangerAppState extends State<TaskMangerApp> {
         SignupScreen.text: (context) => const SignupScreen(),
         ResetPassScreen.text: (context) => const ResetPassScreen(),
         ProfileScreen.text: (context) => const ProfileScreen(),
+        OnboardingScreen.text:(context) => const OnboardingScreen(),
       },
     );
   }

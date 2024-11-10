@@ -34,13 +34,13 @@ class ProfileUpdateController extends GetxController {
     };
 
     NetworkModel response = await NetworkCaller.postRequest(
-        url: Urls.profileUpdateUrl, header: head);
+        url: Urls.profileUpdateUrl, body: data, header: head);
     _inProgress = false;
     update();
     if (response.isSuccess) {
       isSuccess = true;
-      await Auth.clearUserData();
-      Auth.setUserDataCache(email, firstName);
+      await Auth.setUserDataCache(email, firstName);
+      await Auth.getUserDataCache();
       update();
     } else {
       _errorMessage = response.errorMessage;
