@@ -155,7 +155,6 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     }
   }
 
-
   String? _validator2(String? value) {
     if (value == null || value.isEmpty) {
       return 'Field must not be empty';
