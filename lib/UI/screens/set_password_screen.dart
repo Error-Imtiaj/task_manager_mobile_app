@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-
 import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 import 'package:task_manager_mobile_app/UI/utils/urls.dart';
