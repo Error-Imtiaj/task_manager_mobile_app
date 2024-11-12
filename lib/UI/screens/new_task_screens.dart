@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:task_manager_mobile_app/UI/screens/add_new_task_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
@@ -106,6 +104,7 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
         MaterialPageRoute(builder: (context) => const AddNewTaskScreen()));
     if (shouldRefresh) {
       fetchTask();
+      fetchTaskstatus();
     }
   }
 
