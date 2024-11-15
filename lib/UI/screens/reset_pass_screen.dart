@@ -1,16 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:task_manager_mobile_app/UI/controller/reset_password_controller.dart';
 import 'package:task_manager_mobile_app/UI/screens/login_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/pin_screens.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
-import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
 import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
-
-import 'package:task_manager_mobile_app/data/model/network_response.dart';
-import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class ResetPassScreen extends StatefulWidget {
   static const String text = '/resetPassword';
@@ -23,6 +21,7 @@ class ResetPassScreen extends StatefulWidget {
 class _ResetPassScreenState extends State<ResetPassScreen> {
   final TextEditingController emailController = TextEditingController();
   bool _isLoading = false;
+  final resetController = Get.find<ResetPasswordController>();
   @override
   void dispose() {
     // TODO: implement dispose
@@ -88,19 +87,25 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                 ),
 
                 // BUTTON
-                Visibility(
-                  visible: !_isLoading,
-                  replacement: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                  child: Custombutton(
-                    ButtonName: "Send verification Code",
-                    ontap: () {
-                      if (fromkey.currentState!.validate()) {
-                        _sendVerificationMail();
-                      }
-                    },
-                  ),
+                GetBuilder<ResetPasswordController>(
+                  init: ResetPasswordController(),
+                  initState: (_) {},
+                  builder: (context) {
+                    return Visibility(
+                      visible: !context.isLoading,
+                      replacement: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      child: Custombutton(
+                        ButtonName: "Send verification Code",
+                        ontap: () {
+                          if (fromkey.currentState!.validate()) {
+                            _sendVerificationMail();
+                          }
+                        },
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -135,42 +140,26 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
   }
 
   void _navigateToSignInPage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const LoginScreen();
-    }));
+    Get.toNamed(LoginScreen.text);
   }
 
   void _navigateToPinVerifyPage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return PinScreens(
-        email: emailController.text.trim(),
-      );
-    }));
+    Get.to(() => PinScreens(email: emailController.text.trim()));
   }
 
   Future _sendVerificationMail() async {
     _isLoading = true;
-    setState(() {});
-    try {
-      NetworkModel sendMailResponse = await NetworkCaller.getRequest(
-        url: '${Urls.sendOtpToEmailUrl}/${emailController.text.trim()}',
+    bool resut =
+        await resetController.sendVerificationMail(emailController.text);
+    if (resut) {
+      showSnackBar(
+        context,
+        resetController.message,
+        false,
       );
-      _isLoading = false;
-      setState(() {});
-      if (sendMailResponse.statusCode == 200) {
-        showSnackBar(
-          context,
-          sendMailResponse.message,
-          false,
-        );
-        _navigateToPinVerifyPage();
-      } else {
-        showSnackBar(context, sendMailResponse.errorMessage, true);
-      }
-    } catch (e) {
-      _isLoading = false;
-      setState(() {});
-      showSnackBar(context, e.toString(), true);
+      _navigateToPinVerifyPage();
+    } else {
+      showSnackBar(context, resetController.message, true);
     }
   }
 
