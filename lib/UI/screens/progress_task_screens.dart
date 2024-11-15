@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:task_manager_mobile_app/UI/controller/progress_screnn_controller.dart';
 import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/taskTile_widget.dart';
@@ -15,8 +17,7 @@ class ProgressTaskScreens extends StatefulWidget {
 }
 
 class _ProgressTaskScreensState extends State<ProgressTaskScreens> {
-  List<NewTaskList> allNewTaskList = [];
-  bool _fetchingTask = false;
+  final progressScreenController = Get.find<ProgressScrennController>();
 
   @override
   void initState() {
@@ -32,33 +33,41 @@ class _ProgressTaskScreensState extends State<ProgressTaskScreens> {
       body: Column(
         children: [
           // TASK ITEMS
-          Visibility(
-            visible: !_fetchingTask,
-            replacement: Center(
-              child: CircularProgressIndicator(),
-            ),
-            child: Expanded(
-                child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: ListView.separated(
-                itemCount: allNewTaskList.length,
-                itemBuilder: (context, index) {
-                  return TasktileWidget(
-                    title: allNewTaskList[index].title,
-                    description: allNewTaskList[index].description,
-                    date: allNewTaskList[index].createdDate,
-                    chipText: allNewTaskList[index].status!,
-                    callback: () => deleteTask(allNewTaskList[index].id),
-                    id: allNewTaskList[index].id,
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(
-                    height: 8,
-                  );
-                },
-              ),
-            )),
+          GetBuilder<ProgressScrennController>(
+            init: ProgressScrennController(),
+            initState: (_) {},
+            builder: (data) {
+              return Visibility(
+                visible: !data.fetchingTask,
+                replacement: Center(
+                  child: CircularProgressIndicator(),
+                ),
+                child: Expanded(
+                    child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: ListView.separated(
+                    itemCount: data.allNewTaskList.length,
+                    itemBuilder: (context, index) {
+                      return TasktileWidget(
+                        title: data.allNewTaskList[index].title,
+                        description: data.allNewTaskList[index].description,
+                        date: data.allNewTaskList[index].createdDate,
+                        chipText: data.allNewTaskList[index].status!,
+                        callback: () =>
+                            data.deleteTask(data.allNewTaskList[index].id),
+                        id: data.allNewTaskList[index].id,
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(
+                        height: 8,
+                      );
+                    },
+                  ),
+                )),
+              );
+            },
           )
         ],
       ),
@@ -67,47 +76,19 @@ class _ProgressTaskScreensState extends State<ProgressTaskScreens> {
 
   // FETCH TASK
   Future<void> fetchTask() async {
-    _fetchingTask = true;
-    setState(() {});
-    allNewTaskList.clear();
-    Map<String, String> head = {
-      'Content-Type': 'application/json',
-      'token': Auth.myToken.toString()
-    };
-
-    NetworkModel response = await NetworkCaller.getRequest(
-      url: Urls.progressTaskUrl,
-      headers: head,
-    );
-
-    if (response.isSuccess) {
-      List data = response.message;
-      for (var i in data) {
-        allNewTaskList.add(NewTaskList.fromJson(i));
-      }
-    } else {
-      showSnackBar(context, response.errorMessage, true);
+    bool result = await progressScreenController.fetchTask();
+    if (!result) {
+      showSnackBar(context, progressScreenController.erroMessage!, true);
     }
-    _fetchingTask = false;
-    setState(() {});
   }
 
   // DELETE TASK
   Future<void> deleteTask(String? id) async {
-    Map<String, String> head = {
-      'Content-Type': 'application/json',
-      'token': Auth.myToken.toString()
-    };
-
-    NetworkModel response = await NetworkCaller.getRequest(
-      url: '${Urls.deleteTaskUrl}/${id}',
-      headers: head,
-    );
-    if (response.isSuccess) {
-      fetchTask();
+    bool result = await progressScreenController.deleteTask(id);
+    if (result) {
       showSnackBar(context, "Task Successfully Deleted");
     } else {
-      showSnackBar(context, response.errorMessage, true);
+      showSnackBar(context, progressScreenController.erroMessage!, true);
     }
   }
 }
