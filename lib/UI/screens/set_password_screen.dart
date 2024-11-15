@@ -10,6 +10,7 @@ import 'package:task_manager_mobile_app/UI/widgets/textfield_widget.dart';
 class SetPasswordScreen extends StatefulWidget {
   final String email;
   final String otp;
+  static const text = '/setPassScreen';
   const SetPasswordScreen({super.key, required this.email, required this.otp});
 
   @override

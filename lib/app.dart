@@ -7,6 +7,7 @@ import 'package:task_manager_mobile_app/UI/screens/onboarding_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/pin_screens.dart';
 import 'package:task_manager_mobile_app/UI/screens/profile_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/reset_pass_screen.dart';
+import 'package:task_manager_mobile_app/UI/screens/set_password_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/signup_screen.dart';
 import 'package:task_manager_mobile_app/UI/screens/splash_screen.dart';
 import 'package:task_manager_mobile_app/controller_binders.dart';
@@ -41,6 +42,11 @@ class _TaskMangerAppState extends State<TaskMangerApp> {
           final email = ModalRoute.of(context)!.settings.arguments as String;
           return PinScreens(email: email);
         },
+        SetPasswordScreen.text:(context){
+          final email = ModalRoute.of(context)!.settings.arguments as String;
+          final otp = ModalRoute.of(context)!.settings.arguments as String;
+          return SetPasswordScreen(email: email, otp: otp,);
+        }
       },
     );
   }

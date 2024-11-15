@@ -1,18 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:task_manager_mobile_app/UI/controller/pin_controller.dart';
 import 'package:task_manager_mobile_app/UI/screens/set_password_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/assetPath.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
-import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/custom_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
-import 'package:task_manager_mobile_app/data/model/network_response.dart';
-import 'package:task_manager_mobile_app/data/services/network_caller.dart';
 
 class PinScreens extends StatefulWidget {
   static const String text = '/pinScreen';
@@ -26,8 +23,7 @@ class PinScreens extends StatefulWidget {
 class _PinScreensState extends State<PinScreens> {
   final TextEditingController pinController = TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey();
-  bool _inProgressVerify = false;
-  bool _resendAgain = false;
+  final pinGetController = Get.find<PinControllerGet>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,46 +83,59 @@ class _PinScreensState extends State<PinScreens> {
               ),
 
               // BUTTON
-              Visibility(
-                visible: !_inProgressVerify,
-                replacement: const Center(child: CircularProgressIndicator()),
-                child: Custombutton(
-                  ButtonName: "Verify",
-                  ontap: () {
-                    if (_formkey.currentState!.validate()) {
-                      _pinVerification();
-                    }
-                  },
-                ),
+              GetBuilder<PinControllerGet>(
+                init: PinControllerGet(),
+                initState: (_) {},
+                builder: (Context) {
+                  return Visibility(
+                    visible: !Context.inprogressPinVerify,
+                    replacement:
+                        const Center(child: CircularProgressIndicator()),
+                    child: Custombutton(
+                      ButtonName: "Verify",
+                      ontap: () {
+                        if (_formkey.currentState!.validate()) {
+                          _pinVerification();
+                        }
+                      },
+                    ),
+                  );
+                },
               ),
               const SizedBox(
                 height: 20,
               ),
-              Visibility(
-                visible: !_resendAgain,
-                replacement: const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                child: Center(
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                            text: "Haven't received the OTP? ",
-                            style: GoogleFonts.poppins(
-                                color: ColorsUtils.primaryColor)),
-                        TextSpan(
-                          text: " Send again",
-                          style: GoogleFonts.poppins(
-                              color: ColorsUtils.primaryColor,
-                              fontWeight: FontWeight.bold),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = _sendVerificationMail,
-                        ),
-                      ],
+              GetBuilder<PinControllerGet>(
+                init: PinControllerGet(),
+                initState: (_) {},
+                builder: (Context) {
+                  return Visibility(
+                    visible: !Context.resendAgain,
+                    replacement: const Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  ),
-                ),
+                    child: Center(
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: "Haven't received the OTP? ",
+                                style: GoogleFonts.poppins(
+                                    color: ColorsUtils.primaryColor)),
+                            TextSpan(
+                              text: " Send again",
+                              style: GoogleFonts.poppins(
+                                  color: ColorsUtils.primaryColor,
+                                  fontWeight: FontWeight.bold),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = _sendVerificationMail,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -135,69 +144,36 @@ class _PinScreensState extends State<PinScreens> {
     );
   }
 
+  // SEND VERIFICATION EMAIL
   Future _sendVerificationMail() async {
-    // LOADING START
-    _resendAgain = true;
-    setState(() {});
-    try {
-      NetworkModel sendMailResponse = await NetworkCaller.getRequest(
-        url: '${Urls.sendOtpToEmailUrl}/${widget.email}',
+    bool result = await pinGetController.sendVerificationMail(widget.email);
+    if (result) {
+      showSnackBar(
+        context,
+        pinGetController.message!,
+        false,
       );
-      // LOADING END
-      _resendAgain = false;
-      setState(() {});
-      if (sendMailResponse.statusCode == 200) {
-        showSnackBar(
-          context,
-          sendMailResponse.message,
-          false,
-        );
-      } else {
-        showSnackBar(context, sendMailResponse.errorMessage, true);
-      }
-    } catch (e) {
-      // LOADING END
-      _resendAgain = false;
-      setState(() {});
-      showSnackBar(context, e.toString(), true);
+    } else {
+      showSnackBar(context, pinGetController.message!, true);
     }
   }
+  // PIN VERIFICATION
 
   Future _pinVerification() async {
-    // LOADING START
-    _inProgressVerify = true;
-    setState(() {});
-
-    try {
-      NetworkModel pinVerifycall = await NetworkCaller.getRequest(
-        url: '${Urls.pinVerifyUrl}/${widget.email}/${pinController.text}',
-      );
-      // LOADING END
-      _inProgressVerify = false;
-      setState(() {});
-      if (pinVerifycall.statusCode == 200) {
-        showSnackBar(context, pinVerifycall.message, false);
-        _navigateToSetPass();
-      } else {
-        showSnackBar(context, pinVerifycall.errorMessage, true);
-      }
-    } catch (e) {
-      // LOADING END
-      _inProgressVerify = false;
-      setState(() {});
-      // SHOW THE ERROR
-      showSnackBar(context, e.toString(), true);
+    bool result = await pinGetController.pinVerification(
+        widget.email, pinController.text);
+    if (result) {
+      showSnackBar(context, pinGetController.message!, false);
+      _navigateToSetPass();
+    } else {
+      showSnackBar(context, pinGetController.message!, true);
     }
   }
 
   void _navigateToSetPass() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => SetPasswordScreen(
-                  email: widget.email,
-                  otp: pinController.text,
-                )));
+    Get.to(
+      () => SetPasswordScreen(email: widget.email, otp: pinController.text),
+    );
   }
 
   Widget _verifyPin() {
