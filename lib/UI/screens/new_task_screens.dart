@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:task_manager_mobile_app/UI/screens/add_new_task_screen.dart';
 import 'package:task_manager_mobile_app/UI/utils/colors.dart';
 import 'package:task_manager_mobile_app/UI/utils/urls.dart';
-
 import 'package:task_manager_mobile_app/UI/widgets/card_widget.dart';
 import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/taskTile_widget.dart';
@@ -155,7 +154,7 @@ class _NewTaskScreensState extends State<NewTaskScreens> {
               : '0',
           title: taskStatusLists.isNotEmpty && taskStatusLists.length > 3
               ? taskStatusLists[3].id.toString()
-              : 'Unknown',
+              : 'Completed',
         ),
         CardWidget(
           count: taskStatusLists.isNotEmpty && taskStatusLists.length > 0

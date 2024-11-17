@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager_mobile_app/UI/controller/progress_screnn_controller.dart';
-import 'package:task_manager_mobile_app/UI/utils/urls.dart';
 import 'package:task_manager_mobile_app/UI/widgets/snack_bar.dart';
 import 'package:task_manager_mobile_app/UI/widgets/taskTile_widget.dart';
-import 'package:task_manager_mobile_app/auth/auth.dart';
-import 'package:task_manager_mobile_app/data/model/network_response.dart';
-import 'package:task_manager_mobile_app/data/model/new_task_list.dart';
-import 'package:task_manager_mobile_app/data/services/network_caller.dart';
+
 
 class ProgressTaskScreens extends StatefulWidget {
   const ProgressTaskScreens({super.key});
@@ -40,7 +36,7 @@ class _ProgressTaskScreensState extends State<ProgressTaskScreens> {
               return Visibility(
                 visible: !data.fetchingTask,
                 replacement: Center(
-                  child: CircularProgressIndicator(),
+                  child: const CircularProgressIndicator(),
                 ),
                 child: Expanded(
                     child: Padding(
